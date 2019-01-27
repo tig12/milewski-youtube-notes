@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>7.2: Monoidal Categories, Functoriality of ADTs, Profunctors | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="7.1-functoriality-bifunctors.html">&larr;</a>
+    <a class="next" title="Next" href="8.1-function-objects-exponentials.html">&rarr;</a>
+</nav>
+
+
+<h1>7.2: Monoidal Categories, Functoriality of ADTs, Profunctors</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=pUQ0mmbIdxs">this youtube video</a></div>
+
+<h2>Monoidal categories</h2>
+
+Monoids were defined in <a href="3.1-examples-orders-monoids.html#monoids">video 3.1</a>.
+
+<br>In a monoidal category, we would like to define things like "what does it mean to multiply two objects".
+<br>When we were talking about monoids, we were talking about operations on elements of a set, or on morphisms, which are elements of the hom-set.
+<br>But here we talk about defining multiplication <i>of objects</i>. 
+<br>We already have categorical product, which is one part of a monoid, the binary operation ; in order to make it a monoid we need associativity of the operation, and a unit for multiplication.
+
+<h2>Unit</h2>
+
+In Haskell, the unit type was noted <code>()</code>, which is a singleton set, defined for a category in general as a <b>terminal object</b>.
+<br>Not every category contains a terminal object, nor a product.
+<br>But suppose we have a category with product and terminal object.
+<br>We can show that this terminal object is the unit.
+
+<img src="img/product-unit.jpg" alt="Product unit">
+
+We neeed to prove that <code>a x () = a</code>.
+<br>Wa have these two projections <code>id <sub>a</sub></code> and <code>unit</code> and <code>a</code> is the candidate.
+
+<img src="img/product-unit2.jpg" alt="Product unit 2">
+
+Since <code>()</code> is the terminal object, we know that there is a unique morphism from <code>a</code> to <code>()</code>.
+<br>Then <code>a</code> is a suitable candidate, but is it the best ?
+<br>So we consider an other object, <code>b</code>, and its two projections, and we have to show that there is a unique morphism from <code>b</code> to <code>a</code>.
+
+<img src="img/product-unit3.jpg" alt="Product unit 3">
+(dashed lines represent uniques morphisms)
+<br>
+<br>This morphism is just <code>p</code>, and it's unique because this is the only morphism such as <code>id <sub>a</sub> o p = p</code>.
+<br>
+<br>The unit is then the terminal object.
+<br>
+<br>A product is defined up to a unique isomorphism ; this is the equivalent in Haskell of <code>(a, ()) ~ a</code>, we have an equivalence, not equality.
+<br>
+<br>So if we have a category with categorical product for every pair of objects and a terminal object, then we have this monoidal structure on objects.
+<br>We can do the same with coproduct, and the unit would be the initial object ; this would also be a monoidal category.
+<br>In general, we need a binary operation on objects that is a bifunctor and a unit for this bifunctor, and we have a monoidal category.
+<br>There are some subtleties, for example associativity, like unit is defined up to isomorphism, this is called <b>lax</b>.
+<br>The product of a monoidal category is called a <b>tensor product</b>, noted <code style="font-size:1.8em; font-weight:bold;">&otimes;</code>. The unit is often noted <code style="font-size:1.6em; font-weight:bold;">1</code>
+
+
+<!-- 11'08 -->
+<h2>Algebraic data types (ADTs) as functors</h2>
+
+So Haskell is a monoidal category both in product and coproduct.
+
+<br>This discussion started saying that ADTs are functorial. So far, we've seen that product and coproduct are functorial. To have a functor, we need to have a type constructor, which takes a type as argument and produces a type. But what about trivial constructors like <code>Bool</code> ? It's not functorial because it doesn't depend on any type. But we can tweak it considering that it depends on a type in a trivial way.
+
+<h3>The <code>Const</code> functor</h3>
+
+The constant functor (introduced in <a href="6.1-functors.html#the-constant-functor">video 6.1</a>) maps every object in a category to a single object, the "black hole" functor. <code style="font-size:1.6em; font-weight:bold;">&Delta;<sub>c</sub></code>, parametrized by <code>c</code>.
+
+<img src="img/constant-functor.jpg" alt="Constant functor">
+
+<div><pre>data Const c a = Const c</pre></div>
+<code>a</code> is the functorial parameter ; <code>a</code> disappears it is ignored to define a constant.
+<br>In the statement <pre>data Const c a = Const c</pre>, notice that the first <code>Const</code> is a data type and the second <code>Const</code> is a type constructor. The have the same name but do not live in the same namespace.
+
+<div><pre>instance Functor(Const c) where
+    -- fmap :: (a &rarr; b) &rarr; Const ca &rarr; Const cb
+    fmap f(Const c) = Const c
+</pre></div>
+As a functor, here we have an empty container.
+<br>
+<br>The identity functor :
+<div><pre>data Identity a = Identity a
+fmap  f(Identity a) = Identity(f a)
+</pre></div>
+This functor accepts an element of type <code>a</code> and keeps it, a container that only contains one value.
+<br>It just applies a function to its contents.
+
+<h3>ADTs as functors</h3>
+
+Now that we have <code>Identity</code> and <code>Const</code> functors, we can combine them with sum and pn taroduct, which are also functorial. So we can take any data type and construct it using these functors.
+<br>
+<br>Example : define the <code>Maybe</code> data type ; we showed explicitly that it's a functor, but now we can say it's a functor because it's an algebraic data type.
+<pre>data Maybe a = Nothing | Just a</pre> is equivalent to <pre>Either () (Identity a)</pre>.
+<br><code>()</code> is <code>Const () a</code>
+<br><code>Const () a</code> is a functor, <code>(Identity a)</code> is a functor, <code>Either</code> is a bifunctor. The composition of a bifunctor and two functor is a bifunctor. So <code>Maybe</code> is a functor.
+<br>All algebraic data type can be turn to a functor with this procedure, which can be automated.
+<br>In fact, this is automated by an extension of Haskell :
+<div><pre>{ -# LANGUAGE DeriveFunctor #-}
+data  Maybe = ...
+    deriving Functor
+</pre></div>
+And the compiler knows how to derive <code>fmap</code>.
+<br>If the data type is parametrically polymorphic, we get a theorem for free, if we have two <code>fmap</code>, they have to be equal.
+
+<h2>Function type</h2>
+
+<div><pre>( &rarr; ) = a &rarr; b</pre></div>
+Arrow is a type constructor. It takes two types <code>a</code> and <code>b</code> and produces a third type, the type of function from <code>a</code> to <code>b</code>.
+<br>
+<br>Strictly speaking, we have not talked about function types, for now we consider that we know what function type is.
+<br>We already saw that the arrow is functorial in the second argument, let's call it <code>Reader</code> functor.
+<div><pre>
+data Reader c a = Reader(c &rarr; a)
+fmap = (.)
+</pre></div>
+If we want to apply a function, we just apply it to the returned type.
+<br>
+<br>This is the third binary type constructor : product, coproduct, and now function type ; is it a bifunctor ?
+<br>
+<br>Here we fixed <code>c</code>, the argument type.
+<br>Let's fix <code>a</code>, the argument type.
+<div><pre>
+data Op c a = Op(a &rarr; c)
+-- fmap :: (a &rarr; b)  &rarr; Op c a &rarr; Op c b
+                      a &rarr; c    b &rarr; c
+</pre></div>
+<code>c</code> is fixed and we vary <code>a</code>.
+
+<img src="img/op-functor.jpg" alt="Op functor">
+
+We want to construct the function from <code>b</code> to <code>c</code>. For two arbitrary functions, one from <code>a</code> to <code>c</code> and one from <code>b</code> to <code>c</code>, we have no way of doing it, except if we cheat.
+<br>If, instead of having <code>a &rarr; b</code>, we had <code>b &rarr; a</code>, we could do <code>(b &rarr; c) = (a &rarr; c) o (b &rarr; a)</code>.
+<br>The trick is to define a functor in the opposite category (where arrows are inverted).
+<br>A morphism <code>a &rarr; b</code> in <code>C<sup>op</sup></code> is the same as a morphism <code>b &rarr; a</code> in <code>C</code>.
+<br>A functor from opposite category, if we look under the hood maps morphisms in the other direction.
+<br>
+<br>This is a functor from the opposite category to <code>Hask</code>. In Haskell, it's a new kind of functor that works on inverted arrows.
+<br>It could be called a <i>cofunctor</i> but for historical reasons it is called a <b>contravariant</b>.
+<div><pre>
+class Contravariant f where
+    contramap :: (b &rarr; a) &rarr; (f a &rarr; f b)
+</pre></div>
+
+It's a sort of negative container. It doesn't contain <code>a</code>s but requires <code>a</code>s for his action
+<br>
+<br>The arrow is a covariant functor in the second argument (returned type) and a contravariant functor in the first argument (argument type).
+
+
+
+<div style="margin-top:5em;">39'</div>
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

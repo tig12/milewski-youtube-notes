@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>2.1: Functions, epimorphisms | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="1.2-what-is-a-category.html">&larr;</a>
+    <a class="next" title="Next" href="2.2-monomorphisms-simple-types.html">&rarr;</a>
+</nav>
+
+
+<h1>2.1: Functions, epimorphisms</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=O2lZkr-aAqk">this youtube video</a></div>
+
+<br>Every time you design a language, you have to provide semantics : what does it mean ? There are two ways of defining semantics.
+<br>One is <b>operational semantics</b> by telling how this things execute ; how a statement can be transformed in a simpler one.
+<br>And the other is <b>denotational semantics</b> where you map it into an other area that you understand, in particular into mathematics. So you build a mathematical model  and you say : this statement or this construct in the language corresponds to this mathematical thing.
+<br>
+<br>For example for types, it is a set of values ; for functions, it is a function between sets.
+<br>
+<br>A function in programming, especially in imperative languages, is not exactly the same as a function in mathematics.
+<br>A function between sets is what we call a <b>pure function</b> and a <b>total function</b> in programming.
+<br>
+<br>A total function is defined for all its arguments, and its argument are taken from some type ; so a function for integers has to be defined for all integers.
+<br>
+<br>A function is pure if you can <b>memoize</b> it, turn it into a lookup table, because for each value of an argument, it should return a particular value. And you can remember this value. You call this function once, it evaluates its argument, you store the answer in a table and the next time you call it you can do a lookup in the table. For finite sets (like booleans or characters), functions are easy to tabulate (functions like <code>isAlpha()</code>, <code>isPrintable()</code>) ; for infinte sets, like strings or integers, we can't tabulate them only because of finite resources - but we could with infinite resources. Functions like <code>getCharAt()</code> can't be memoized.
+<br>
+<br>In practice, we need side effects, but this can be described on top of pure functions.
+<br>If we get to the bottom, the simplest, we get to pure functions, and we can build more complex things on top of it using composability.
+
+<!-- ******************************* -->
+<h2>Functions</h2>
+
+Functions are defined in mathematics as a special kind of <b>relation</b>.
+<br>We place ourselves in set theory, not in <b><code>Set</code></b> category (because in category theory, we don't know about the elements).
+<br>So a relation is a subset of pairs of elements. The set of all pairs form a <b></b>.
+<br>Any substet of this cartesian product is a relation by definition. Without any other requirement.
+
+<img class="margin" src="img/relation.jpg" alt="Relation">
+
+A relation doesn't have to be symetric.
+<br>An element of <code>S<sub>1</sub></code> can be mapped to several elements of <code>S<sub>2</sub></code>.
+<br>Several elements of <code>S<sub>1</sub></code> can be mapped to the same element of <code>S<sub>2</sub></code>.
+<br>
+<br>Functions have direction.
+<br>We have a relation <i>between <code>S<sub>1</sub></code> and <code>S<sub>2</sub></code></i>,
+<br>but we have a function <i>from <code>S<sub>1</sub></code> to <code>S<sub>2</sub></code></i>.
+<br>
+<br>One argument of a function cannot be mapped into several elements.
+<br>But it's ok for several arguments of a function to be mapped to the same value.
+<br>If we consider total functions, all the elements of <code>S<sub>1</sub></code> must be mapped to elements of <code>S<sub>2</sub></code>. But not all elements of <code>S<sub>2</sub></code> need to be mapped by the function
+
+<img class="margin" src="img/function.jpg" alt="Function">
+
+<code>S<sub>1</sub></code> is called the <b>domain</b> of the function and <code>S<sub>2</sub></code> the <b>codomain</b>
+<br>The <b>image</b> of the function is the subset of <code>S<sub>2</sub></code> that is mapped by the function.
+<br>
+<br>Functions have directionality.
+<br>This is important because we find directionality in other kinds of mapping in category theory : <b>functors</b> (mapping between categories), <b>natural transformations</b> (mappings between functors) have the same kind of directionality.
+<br>The simplest way to understand this directionality is asking : is the function invertible ? If a function <code>f</code> permits to go from <code>a</code> to <code>b</code>, is there a function that permits to go from <code>b</code> to <code>a</code> ? Generally it is not.
+
+<!-- ************************************* -->
+<h3>Isomorphisms</h3>
+If we use Haskell notation :
+<br>
+<br><span class="formula">f :: a &rarr; b</span> (a type of function which goes from set a to set b)
+<br>
+<br><code>f</code> is invertible if there exists a function <span class="formula">g :: b &rarr; a</span> such as
+<br>
+<br><span class="formula">g o f = Id</span>
+<br>
+<br>It means that if you have an element <code>x</code> in <code>a</code>, you map it to an element <code>y</code> in <code>b</code> : <b>f(x) = y</b>
+<br>And then if you map <code>y</code> to an element of <code>a</code> with <code>g</code>, you necessarily come back to <code>x</code> :  <b>g(y) = x</b>
+<br>You come back to the same element for any <code>x</code> in the domain of <code>f</code>.
+<br>The same applies in the other direction :
+<br>
+<br><span class="formula">f o g = Id</span>
+<br>
+<br>A function that is invertible is symetric ; it is called an <b>isomorphism</b>.
+<br>This property can be translated to categorical language :
+
+<img class="margin" src="img/isomorphism.jpg" alt="Isomorphism">
+
+<br><span class="formula">g o f = Id<sub>a</sub></span> <span class="formula">f o g = Id<sub>b</sub></span>
+<br>
+<br>We can now express this property without talking about elements.
+<br>And this property is defined for any category, not only category of sets.
+<br>The property is expressed in terms of composition and identity, nothing else.
+<br>
+<br>Isomorphisms are great, they permit to identify two sets, there is a one to one mapping between two sets.
+<br>The two sets can be considered as identical for certain purposes ; they are not really identical, only isomorphic, but we have an identification between these two sets.
+<br>For finite sets, the identification is straight ; for infinite sets, it's a bit more complicate.
+<br>
+<br>There are two reasons for a function not to be an isomorphism :
+<ul class="spaced">
+    <li>
+        If a function collapses several elements of <code>a</code> to the same element of <code>b</code>.
+        <img class="margin" src="img/function-non-injective.jpg" alt="Non injective function">
+        For example function <code>isEven()</code>, which asociates a boolean to an integer.
+        <br>This corresponds to the process of abstraction : we loose information about which element generated <code>y</code>, we leave the details to keep only the information that interests us.
+    </li>
+    <li>
+        If the image of the function doesn't fill the whole codomain.
+        <img class="margin" src="img/function-non-surjective.jpg" alt="Non surjective function">
+        Corresponds to the process of modeling : I'm recognizing the pattern of <code>a</code> inside <code>b</code>.
+    </li>
+</ul>
+
+If we think of a function as something directional, as a process which takes place in time, a function that is not invertible increases entropy. We make a transformation, and can't get back to the initial state.
+
+<br>
+<br>Mathematicians have names for these properties ; the definitions are converse :
+<ul class="spaced">
+    <li>
+        If a function does not collapse, then it is called <b>injective</b> ; the function is a <b>injection</b>
+        <br>If <code>f(x<sub>1</sub>) = f(x<sub>2</sub>)</code> then <code>x<sub>1</sub> = x<sub>2</sub></code>
+    </li>
+    <li>
+        If the image fills the whole codomain (the image is equal to the codomain), then it is called <b>surjective</b> ; the function is a <b>surjection</b>.
+        <br>&forall; y &isin; b, &exist; x &isin; a | y = f(x)
+        <br>(for all y in b, there exists an x such as y = f(x))
+    </li>
+</ul>
+
+If a function is both injective and surjective, then it is a <b>bijection</b>, it is invertible.
+
+
+<!-- ********************************************************************************* -->
+<h2>Epimorphism, monomorphisms</h2>
+
+We have defined the notions of injection and surjection in set theory, using the elements of sets.
+<br>But how can we do that in the <b><code>Set</code></b> category ? We can't use the elements of sets anymore, sets are seen as objects without structure.
+<br>We must use a general way to work in category theory : define the property of an object using the relations of this object with the other objects of the category.
+<br>
+<br>In the Set category, a surjection is called an <b>epimorphism</b> (surjective is called <b>epic</b>), and an injection is called a <b>monomorphism</b> (injective is called <b>monic</b>).
+<br>
+<br>But these are defined for any category, not only sets, so they are more general notions.
+
+<!-- ******************************* -->
+<h3>Epimorphism</h3>
+
+So how to define an epimorphism without talking about elements ? We use other functions and composition.
+
+<img class="margin" src="img/epimorphism.jpg" alt="Categorical definition of an epimorphism">
+
+If we have a function <code>f</code> from <code>a</code> to <code>b</code> which is not surjective, it means that there are elements of <code>b</code> that are not in the image of <code>f</code>.
+<br>If we take a function <code>g :: b &rarr; c</code> whose domain is <code>b</code>, it will map elements of <code>b</code> that are inside and outside the image of <code>f</code>.
+<br>But if we compose <code>g</code> with <code>f</code>, <code>g o f</code> will only act on the image of <code>f</code>, and do not deal with the elements outside the image of <code>f</code>.
+<br>If we take two such functions <code>g<sub>1</sub></code> and <code>g<sub>2</sub></code> that differ only outside the image of <code>f</code>, the compositions <code>g<sub>1</sub> o f</code> and <code>g<sub>2</sub> o f</code> will be the same.
+<br>So we can have <code>g<sub>1</sub> o f = g<sub>2</sub> o f</code> with <code>g<sub>1</sub></code> different from <code>g<sub>2</sub></code>.
+<br>
+
+<br>The converse of this logic permits to define an epimorphism :
+<br>
+<div class="formula margin inline-block">
+f is an epimorphism if for all set c, for all functions g<sub>1</sub> and g<sub>2</sub>,
+<br>g<sub>1</sub> o f = g<sub>2</sub> o f implies that g<sub>1</sub> = g<sub>2</sub>
+</div>
+
+<br>In the <code>Set</code> category, this corresponds to surjection.
+<br>But this is defined without any references to elements of the sets, and applies to any category.
+<br>
+<br>Notice that we use "for all" quantifiers : we must look at all sets <code>c</code>, and all functions <code>g</code> from <code>b</code> to <code>c</code> to define the property of <code>f</code>.
+<br>
+<br>A way to look at this is that we can cancel <code>f</code> : <code>g<sub>1</sub> <strike>o f</strike> = g<sub>2</sub> <strike>o f</strike></code>
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

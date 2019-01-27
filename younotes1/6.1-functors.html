@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>6.1: Functors | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="5.2-algebraic-data-types.html">&larr;</a>
+    <a class="next" title="Next" href="6.2-functors-in-programming.html">&rarr;</a>
+</nav>
+
+
+<h1>6.1: Functors</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=w1WMykh7AxA">this youtube video</a></div>
+
+<h2>Motivation</h2>
+
+Why are functors so important ? Functors are mapping between categories. For mathematicians, the important things are <b>natural transformations</b>, which are mapping between functors, and functors is an important step towards the definition of natural transformation.
+<br>There are things in category theory that formalize thing that we wouldn't have even thought they were formalizable.
+<br>For example universal construction is about being able to define what it means to be a perfect embodiement of an ideal. How do we define a product ? Among all the possibilities we pick the best one, the ideal. If it exists, it is unique up to an isomorphism. The two different types of universal constructions we saw, for product and coproduct, define slightly different ways of saying what is more ideal than other thing ; one of them is perfect. For product, it's property is that there is a morphism coming from any other candidate, which means that any other candidate can be distilled to this ideal of a product. With coproduct we sort of did the opposite : here is the ideal coproduct, and any other candidate has in it an image of it because there is a morphism from this perfect coproduct down to any other candidate ; this morphism finds the perfection inside this imperfect thing.
+<br>
+<br>Mathematically speaking, functors is a rather simple idea, it's just a mapping from a category to an other.
+<br>
+<br>With product and coproduct, we used a loose vocabulary, saying we are looking for a pattern. For instance a single object (for terminal and initial objects), or an object and two arrows (for product and coproduct) and we try to match this pattern in our big category.
+<br>Pattern matching is so obvious. That's what we do from the moment we wake up untill we go to sleep, and maybe in our dreams ; it's like the most important thing in understanding the world. We build a model of the world and match it to reality, we try to find patterns everywhere and recognize them.
+<br>Category theory tells us how to formalize pattern recognition. It says that to recognize a pattern into a category you have to define what you mean by the pattern. A pattern must be some kind of <b>structure</b>. And then you have to map this pattern into this category, in such a way you recognize the pattern, which means that you have to <i>preserve its structure</i>.
+<br>
+<br>So what does it mean to have structure ? Category is a definition of structure ; category is structure abstracted to bare essential.
+<br>So to recognize a structure inside a category you have to define your pattern as a category. If it's a simple pattern, it will be a tiny category.
+<br>So being able to recagnize a category inside an other category is the definition of pattern recognition. We'll come back to that when we define a more general thing called <b>limits</b> and <b>colimits</b>, and we'll see that product and coproduct are just examples of limits and colimits.
+<br>
+<br>This is what's important : being able to define mapping between categories. We can think of one category as being the pattern or the model and we map it into an other category and we recognize a match of this model or embed this model into an other category.
+
+<h2>Definition</h2>
+
+First we must be able to match objects. For simplicity, let's just consider small categories, where the objects just form a set. So mapping objects is just a mapping of sets, a function. Things we know about functions, like collapse things (non injective) or not cover the whole codomain (non surjective), just translate to that part of the definition of a functor.
+<br>Functions are primitive, trivial : what is really interesting in mathematics and in the world in general is mapping that preserve structure. And functions are just mappings between sets, and sets have no structure.
+<br>
+<br>Categories embodies structure, but is there a category that embodies the lack of structure ? How to represent a set as a category ? It's a category without arrows, except identities (if we have arrows, we have structure, because arrows compose). It is called a <b>discrete category</b> (we talk about a single set, not the <code>Set</code> category). Any category that is not discrete has structure.
+<br>
+<br>To preserve structure, our mapping must also map arrows.
+
+<img src="img/functor.jpg" alt="Functor">
+
+Let's call <code>F</code> the functor beween categories <code>C</code> and <code>D</code>.
+<br>In category <code>C</code>, the arrows between two objects <code>a</code> and <code>b</code> form a set, the hom-set <code>C(a,b)</code> which is mapped to hom-set <code>D(Fa, Fb)</code>. A mapping between hom-sets is a mapping between sets, which is again a function. We must then define a function for each pair of objects.
+<br>So we have a potentially huge number of functions : one function to map the objects, and one function per hom-set.
+<br>
+<br>And to preserve structure, we must preserve <b>composition</b> and have : <code><b>F(g o f) = Fg o Ff</b></code> ; not every mapping will fit.
+<br>
+<br>We must also preserve <b>identity</b> and have : <code><b>F Id<sub>a</sub> = Id<sub>Fa</sub></b></code>. This is part of the mapping between hom-sets <code>C(a, a)</code> and <code>D(Fa, Fa)</code> ; not every mapping will fit.
+<br>
+<br>So a functor is a mapping betwwen objects and morphisms, that preserve composition and identity.
+<br>It formalizes the idea of "What does it mean to preserve a structure ?".
+<br>
+<br>Let's also notice that <code>C</code> and <code>D</code> can be the same category. In this case <code>F</code> is called an <b>Endofunctor</b>.
+
+<h2>Properties</h2>
+
+Whenever objects are connected in the source category, they are connected in the target category.
+<br>It is possibe to have a bunch of arrows between <code>a</code> and <code>b</code> and have only one arrow between <code>Fa</code> and <code>Fb</code> ; the mapping is a function, it can squish things together.
+<br>It doesn't mean that every morphism between <code>Fa</code> and <code>Fb</code> will have a corresponding morphism between <code>a</code> and <code>b</code>, the mapping doesn't have to be surjective.
+<br>So we can drop information when we go from a functor to an other, but important : we never destroy connection ; we can squiz it but not suppress it.
+<br>This reminds us topology and continuous transformations where we never break connection (there exists continuous functors that have a more precise definition).
+<br>
+<br>If a functor does not shrink arrows, if the mappings of hom-sets are injective, then the functor is called safe, or <b>faithful</b>.
+<br>If the mappings of hom-sets are surjective, then the functor is <b>ful</b>.
+<br>Notice that this concerns only hom-sets, not objects. A functor can collapse objects (non injective on objects) and still be faithful. Or it can map the source category to a subset of the destination category and still be ful.
+<br>The most "fidel" functors are ful and faithful (fully faithful), hom-set mappings are surjective and injective, isomorphic.
+
+<h3>Functor on one object category</h3>
+
+This category is called <code>1</code>. This will map in one object of the destination category.
+<br>There are many such mappings as there are many objects to pick in the destination category.
+
+<img src="img/functor-one-object.jpg" alt="Functor on one object category">
+
+A functor from a single object category is equivalent to picking an object in the destination category. It's like with functions, from the terminal object (singleton set) into any other set to pick an element of the set.
+
+<h3><a name="the-constant-functor">The constant functor</a></h3>
+The constant functor is a functor that collapses all objects of the source category to one single object <code>c</code> of the destination category.
+
+<img src="img/constant-functor.jpg" alt="Constant functor">
+
+All the arrows of the source category are mapped to identity.
+<br><code>c</code> is a kind of black hole.
+<br>There are many constant functors depending on which object we pick in the destination category.
+<br>This functor is noted <span style="font-weight:bold; font-size:1.5em;"><code>&Delta;<sub>c</sub></code></span>.
+<br>The object c totally defines the functor.
+
+<h2>In programming</h2>
+
+Most common functors found in programming are endofunctors in the category of types and functions.
+<br>In Haskell, endofunctors are just called functors ; it's sort of assumed that there is only one category.
+<br>So what is a "functor" (endofunctor) ? Objects become types and morphisms become functions.
+<br>It first needs to be a mapping of types ; we consider a <i>total</i> mapping ; every type must be mapped.
+<br>In Haskell we call it type constructor ; in other languages, it's called parametrized data type, or template, or generic type. It's the notion of a whole family of types parametrized by other types.
+<br>And it also has to map morphisms (here functions).
+
+<h3>Example : Maybe</h3>
+
+For every type <code>a</code>, we are defining a new type <code>Maybe a</code>.
+<div><pre>data Maybe a</pre></div>
+<code>a</code> is a type ; can be integer, boolean...
+<br>The functor <code>Maybe</code> maps type <code>a</code> to type <code>Maybe a</code> ; for example <code>Int</code> is mapped to <code>Maybe Int</code>.
+<br>In Haskell, the definition is :
+<div><pre>data Maybe a = Nothing
+             | Just a</pre></div>
+It's a coproduct of unit and identity.
+<br>
+<br>To be a functor, we need to define mapping of functions.
+
+<img src="img/maybe-functor.jpg" alt="Maybe functor">
+
+A function <code>f</code> between two types <code>a</code> and <code>b</code> must be mapped to a function beween <code>Maybe a</code> and <code>Maybe b</code>.
+<br>In Haskell, this function, <code>Maybe f</code> is noted <code>fmap f</code>, it has the same name for all functors.
+<br>For the <code>Maybe</code> functor, the definition of <code>fmap</code> is :
+<div><pre>fmap :: (a &rarr; b) &rarr; (Maybe a &rarr; Maybe b)</pre></div>
+It takes in argument a function from type <code>a</code> to type <code>b</code> and returns a function from type <code>Maybe a</code> to <code>Maybe b</code>.
+<br>In Haskell we don't need to specify for which <code>fmap</code> we mean but in mathematics we would say <code>fmap<sub>Maybe</sub></code>.
+<br><code>fmap</code> is defined differently for every functor. In Haskell we have a kind of polymorphism.
+
+<h4>Implementation</h4>
+<code>fmap</code> takes a function <code>f</code> from <code>a</code> to <code>b</code> and produces a function that goes from <code>Maybe a</code> to <code>Maybe b</code>.
+<br>This function takes a <code>Maybe a</code>.
+<br>A <code>Maybe a</code> can be either <code>Nothing</code> or <code>Just</code>, so we need to consider two cases.
+<ul>
+    <li>
+        <div><pre>fmap f Nothing = Nothing</pre></div>
+        The return type must be of type <code>Maybe b</code>.
+        <br>But does it really have to be <code>Nothing</code> (appart from <code>Bottom</code>) ?
+        <br>We could say "it's <code>Nothing</code> unless the type <code>a</code> is integer".
+        <br>We want to use polymorphic functions in a language. The language Haskell tells us that functions should be parametrically polymorphic. So if we say "we are in system <code>F</code> which is parametrically polymorphic, then we have only certain ways to construct polymorphic functions using a single formula" then <code>Nothing</code> is the only answer. But there is something called ad'hoc polymorphism which permits to say "for everything except for integer do this and for integer do something else". It's a legitimate kind of polymorphism except that we don't want to use it here.
+        <br>It's important to be aware that when we program we are straying from mathematics, we are imposing a stronger condition than being a functor.
+        <br>Once we impose that condition of being parametrically polymorphic, we are making it much more restrictive. So it's so much more restrictive that it leads to so-called <i>theorm for free</i>, something that says "because in Haskell we can only implement polymorphic functions of a limited kind (a certain type of polymorphism) then it imposes additional conditions on what we can do".
+    </li>
+    <li>
+        <div><pre>fmap f Just x = Just(f x)</pre></div>
+        [ We could say it's <code>Nothing</code>. Homework : if we put <code>Nothing</code>, will it be a good functor ? ]
+        <br>This is a typical way of implementing a functor. A functor on <code>a</code> usually has something of type <code>a</code> inside and can just apply this function to the insides of the functor.
+    </li>
+</ul>
+
+We now have the definition of mappings of the functor :
+<div><pre>data Maybe a = Nothing
+             | Just a</pre> defines object mapping.</div>
+<div><pre>fmap f Nothing = Nothing
+fmap f Just x = Just(f x)</pre> defines morphism mapping.</div>
+But to know if we have a functor, we must know :
+<ul>
+    <li>
+        Is it mapping identity to identity ?
+    </li>
+    <li>
+        Does it preserve composition ?
+        <br>Response after a break !
+    </li>
+</ul>
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

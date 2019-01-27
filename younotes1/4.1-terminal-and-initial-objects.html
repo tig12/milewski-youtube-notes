@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>4.1: Terminal and initial objects | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="3.2-kleisli-category.html">&larr;</a>
+    <a class="next" title="Next" href="4.2-products.html">&rarr;</a>
+</nav>
+
+
+<h1>4.1: Terminal and initial objects</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=zer1aFgj4aU">this youtube video</a></div>
+
+<h2>Recapitulation on Kleisli category</h2>
+We start with a category <code>C</code> and based on this category we build an other category, the Kleisli category <code>K</code>.
+<br>In <code>K</code>, the objects are the same as in <code>C</code>. However, the arrows in <code>K</code> are not the same as the arrows in <code>C</code>. 
+<br>In <code>C</code>, we have a mapping which, for every object, gives an other object.
+<br>We saw a particular case in which for every type <code>a</code>, we assign to it a pair composed by <code>a</code> and a string. <code>a &rarr; (a, string)</code>.
+<br>We make a mapping of types - from type a to type <code>(a, string)</code> - let's call it <code>ma</code> ; we'll see later that this kind of mapping is a <code>functor</code>.
+<br>
+<br>In <code>C</code>, the arrow from <code>a</code> to <code>mb</code> (the embellished arrow) becomes the arrow from <code>a</code> to <code>b</code> in <code>K</code>.
+<br>In a way, we implement an arrow in <code>K</code> in terms of an arrow in <code>C</code>.
+
+<img src="img/kleisli.jpg" alt="Kleisli category">
+
+For <code>K</code> to be a category, we need :
+<ul>
+    <li>
+        Composition ; this is not obvious.
+        <br>In <code>C</code>, the arrow from <code>a</code> to <code>mb</code> and the arrow from <code>b</code> to <code>mc</code> do not compose (the end of the first is different from the begining of the second).
+        <br>We saw that in this particular case, they compose : first we use the arrow from <code>a</code> to <code>mb</code>, and we get the pair <code>(b, string)</code> ; from this pair we take <code>b</code> and use the arrow from <code>b</code> to <code>mc</code>, and we get the pair <code>(c, string)</code> ; and we combine this by concatenating the two strings to return a pair <code>(c, string1 + string2)</code>.
+        <br>This was possible because concatenation composes, but this is not generally true.
+        <br>To have composition in <code>K</code>, we must be able to find a way to define composition in the implementation.
+    </li>
+    <li>
+        Identity : we built that defining an arrow from <code>a</code> to <code>ma</code>, which has to be a unit in the new composition we build.
+        <br>This was achieved using an empty string.
+    </li>
+    <li>
+        Associativity ; this was possible because string concatenation is associative.
+    </li>
+</ul>
+
+Once all this is established, we can say that <code>K</code> is a category.
+<br>And the mapping <code>m</code> is called a <b>monad</b> ; this is one of the many definition of a <b>monad</b>.
+
+<h2>Universal construction</h2>
+
+So we talked about sets, with two views : the category <code>Set</code>, and set theory.
+<br>In set theory, sets are things that have elements ; using the elements, we can define things like functions ; we have empty set, singleton set.
+<br>And then in category Set, we become amnesic, we don't know anymore that sets contain elements. Wa can only talk about arrows. These arrows come from functions in set theory. Every time we have a function between two sets, we have an arrow in the category.
+<br>And we know how to compose functions (the result of a function is the argument of an other function). We use the way functions compose in set theory to determine how arrows compose in our Set category. In the category, we don't know why the arrows compose this way, this knowledge comes from set theory.
+<br>
+<br>But then how can we define things that we know from set theory ? Empty set, singleton set, cartesian product ? All these notions are defined in terms of elements. We have to rediscover all this using only arrows and their composition, nothing else.
+<br>There is a very general method of defining things called <b>universal construction</b>.
+<br>In category theory, we use universal construction to construct a particular kind of object, or a particular kind of arrow, or a particular kind of pattern that we knew in set theory.
+<br>As we can't look inside an object, the only thing we can do is define the properties of an object in terms of relations of this object to every other object of the category. These relations are the arrows incoming to this object or outgoing from this object. We have to think about the whole universe.
+<br>That's what we did when we talked about epimorphisms and automorphisms.
+<br>
+<br>The general method of universal construction is like googling something : you define a pattern, a combination of objects and arrows. It could be a simple pattern, like one object, or an object and an arrow to an other object.
+<br>So you say "here is my pattern, google in this category and show me your hits, everything that matches this pattern". In general we get a lot of results, often an infinity.
+<br>So it's not good enough, we need to rank these results. If we have two hits matching the same pattern, we need to be able to say which one is better than the other. Maybe not all objects are comparable, and this does not guarantee that one object is at the top. But if there is one, then we know that it is the object we were looking for.
+
+<h2>Terminal object</h2>
+
+We place ourselves in the <code>Set</code> category and try to find the universal property for the <b>singleton set</b>.
+<br>Singleton set is also called a <b>unit</b> and noted <span class="formula">()</span>.
+
+<br>How does this set relate to other sets ?
+
+<br>One interesting property is that it has an incoming arrow coming from every other object in the category. A polymorphic function which ignores its argument and returns a unit. There is even a function from the empty set (<code>void</code>).
+
+<img src="img/singleton-incoming.jpg" alt="Incoming arrows to a singleton">
+
+Unfortunately, this property is not limited to empty set. In fact there are arrows from every set to every other set, except for one case : there is no arrow from a non-empty set to empty set.
+<br>For example, there are at least two functions between a set and a two-element set (type <code>bool</code>) : functions that we can call <code>true</code> and <code>false</code>, which ignore the arguments and return <code>true</code> or <code>false</code>.
+<br>
+<br>The difference is that for singleton set, there is only one incoming arrow, a unique arrow from any other set to unit.
+<br>
+<br>Here is an universal property that defines the singleton set.
+<br>
+<br>But this construction involves only arrows, we can forget about sets and apply it to any other category.
+<br>We call the object defined this way a <b>terminal object</b>.
+<br>In every category, we can try to define a terminal object : this is an object that has a unique arrow coming from any other object.
+<br>We'll see that not every category has a terminal object.
+<br>There are two separate conditions :
+<ul>
+    <li>
+        For all object <code>a</code>, there exists an <code>f</code> that goes from a to the terminal object.
+        <div class="formula">&forall; a &exist; f :: a &rarr; ()</div>
+    </li>
+    <li>
+        For every two functions <code>f</code> and <code>g</code> from a to the terminal object, <code>f</code> and <code>g</code> must be equal.
+        <div class="formula">&forall; f :: a &rarr; (), g :: a &rarr; () &rArr; f = g</div>
+        That's the way to define uniqueness in mathematics : what if I have two things that satisfy a condition ? They have to be equal, so I only have one of them. 
+    </li>
+</ul>
+
+<h4>Example in an order</h4>
+What does a teminal object mean ? Having an arrow from any other object means that the object is <i>less than or equal</i> any other object. So the terminal object must be the largest object.
+<br>Obviously we see that some categories don't have a largest object, for example there is no largest natural number.
+
+<h2>Initial object</h2>
+
+We can try to define an empty set, or see what it happens if we invert the arrows of the terminal object. In fact, this is the same question.
+<br>An empty set can be defined by outgoing arrows.
+<br>We call <b>void</b> empty set.
+<br>There is a function going from void to any other type, a tricky function called <b>absurd()</b> : I say that I have this function, try calling it ; give me an element of void and I'll give you an element of a. Since you can't give me an element of void, you can't prove that this function does not exist.
+
+<img src="img/absurd.jpg" alt="Outgoing arrows from empty set">
+
+Here we have reversed the definition used for the terminal object.
+<br>The <b>initial object</b> is an object that has a unique outgoing arrow to every other object.
+<br>In the set category, it corresponds to an empty set.
+<br>The definition is similar to terminal object's definition :
+<ul>
+    <li>
+        For all object <code>a</code>, there exists an <code>f</code> that goes from the initial object to <code>a</code>.
+        <div class="formula">&forall; a &exist; f :: void &rarr; a</div>
+    </li>
+    <li>
+        For every two functions <code>f</code> and <code>g</code> from the initial object to <code>a</code>, <code>f</code> and <code>g</code> must be equal
+        <div class="formula">&forall; f :: void &rarr; a, g :: void &rarr; a &rArr; f = g</div>
+    </li>
+</ul>
+
+<h3>Unique path</h3>
+
+In any category that has a terminal object, any path that goes from an object to the terminal object can be replaced by a single arrow. 
+
+<img src="img/path-to-terminal.jpg" alt="Outgoing arrows from empty set">
+
+And it's always the same arrow, that's where uniqueness come from : any path can be shrunk to the same unique arrow.
+<br>
+<br>If instead of having void we had the boolean set (two-element set), we would have at least two paths from any object,the true path and the false path.
+<br>
+<br>And the same is true with initial object if we reverse.
+
+<h3>Uniqueness</h3>
+
+The next question we might ask is "how many of these objects are there ?"
+<br>Intuitively we can say that there is only one empty set, but for the singleton set, this is not obvious : is the set containg one orange equal to the set containing one apple ? It raises the question of the meaning of equality of two objects. We don't know. It is not part of our thinking about categories. There is no equality of objects. There is equality of arrows. If we have two arrows with the same end and beginning, we can ask the question of their equality. But for objects, equality is not defined.
+<br>Instead we can aks the question "Are they isomorphic ?". Isomorphism is weel defined in every category (if you have two arrows between the objects, one being the invert of the other).
+<br>
+<br>Terminal and initial objects are unique up to an isomorphism. The proofs are almost the same, except inverting the arrows.
+<br>A stronger condition is may be that there is a unique isomorphism between two terminal or two initial objects.
+<br>For example, if we have a set containing true and false, and a set containing black and white, there are two isomorphisms :
+<br>One associates black to true and white to false ; one associates white to true and black to false.
+
+<h4>Proof for terminal object</h4>
+
+Suppose we have two terminal objects a and b. Just apply the definition : 
+<br><code>a</code> is a terminal object so there is a unique arrow from any object to <code>a</code>.
+<br>In particular, there will be an arrow from <code>b</code> to <code>a</code> (let's call it <code>g</code>).
+<br>But <code>b</code> is also a terminal object, so there is a unique arrow from <code>a</code> to <code>b</code> (let's call it <code>f</code>).
+<br>Let's call <span class="formula">h = g o f</span> ; it goes from <code>a</code> to <code>b</code> and back to <code>a</code>, so it's a loop from <code>a</code> to <code>a</code>.
+<br>But <code>a</code> is a terminal object, so there is a unique arrow from <code>a</code> to <code>a</code>.
+<br>And we know that there is always an identity for any object, so <code>h = Id</code>.
+<br>So whe have <span class="formula">g o f = Id<sub>a</sub></span>, so f and g are isomorphic.
+<br>Similarily <span class="formula">f o g = Id<sub>b</sub></span>
+<br>And it's a unique isomorphism because <code>f</code> and <code>g</code> are unique (by definition of terminal object).
+
+<h2>Back to universal constructions</h2>
+
+This illustrates universal construction. Here the pattern to pick is the simplest possible pattern, an object.
+<br>Show me all the examples of this pattern in your category ; these are all the objects of the category.
+<br>The query is very imprecise, but we have the ranking. We say that a is better than b if there is a unique arrow from b to a.
+<br>Many objects have multiple arrows incomping to them, so they don't compare, the ranking is not a total order.
+
+<img src="img/terminal-object-selection.jpg" alt="Terminal object selection">
+
+So the terminal object is better than any other object.
+<br>
+<br>The difference between terminal and initial objects lies only in ranking. The query is the same ("an object"). To rank the initial object we would say that <code>a</code> is better than <code>b</code> if there is an arrow from <code>a</code> to <code>b</code>.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

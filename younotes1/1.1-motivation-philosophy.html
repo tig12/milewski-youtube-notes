@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>1.1: Motivation and Philosophy | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <!-- <a class="prev" title="Previous" href="">&larr;</a> -->
+    <a class="next" title="Next" href="1.2-what-is-a-category.html">&rarr;</a>
+</nav>
+
+<h1>1.1: Motivation and Philosophy</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=I8LbkfSSR58">this youtube video</a></div>
+
+<br>Is category theory useful only for functional programming ?
+<br>
+<br>Assembly language is the lowest possible level where you tell the computer exactly precisely what to do, like grab this thing from memory, put it in a register, use it as an address, then jump and so on. A very imperative way of programming, related to <b>Turing machines</b>, very primitive machines which stamps things on a paper tape : read this number, put it back on tape, erase something from the tape and so on. There is no high-level programming. This is one approach of programming.
+<br>
+<br>There is an other approach of programming which comes from <b>lambda calculus</b> ; what is possible to compute, thinking about mathematics in terms of how things can be actually executed.
+<br>
+<br>These approaches of programming are not very practical. Writing programs in assembly language is possible but does not scale, that's why we came up with languages that offer higher levels of abstraction ; the next level of abstraction was procedural programming.
+<br>Procedural programming relies on a very important idea : if you want to deal with a complex problem, you chop it into smaller problems (you divide a big problem into small procedures), solve them separately and combine the solutions - this is <b>composability</b>.
+<br>
+<br>Object oriented programming is even more abstract ; once you program an object, you don't have to look inside, you can forget about the implementation and just look at the surface of the object, its interface.
+<br>
+<br>So far we have two important ideas :
+<ul class="naked spaced">
+    <li><b>Composability</b>.</li>
+    <li><b>Abstraction</b> : we get rid of details.</li>
+</ul>
+
+With abstraction and composability comes the idea of <b>reusability</b>.
+<br>
+<br>Object-oriented approach poses problem when we want to write concurrent code. Concurrency does not mix well with object-oriented programming, because objects hide implementation, and hide exactly the wrong thing which make them not very composable. They hide mutation, changing their internal state without saying they do so. And they share data between them.
+<br>Mixing sharing and mutation has a name : <b>data race</b>.
+<br>We can use locks, but locks don't combine either.
+<br>
+<br>The next level of abstraction is functional programing ; you abstract things into functions. In a functional language, you don't have mutations so you don't have this problem of hiding data races. You also have ways of composing data structures into bigger data structures. As everything is immutable, you can safely compose things.
+<br>
+<br>Category theory is this higer-level language above functional languages. Not a language which permits to write code, but it lets us express ideas that can be later expressed in programming languages.
+<br>
+<br>Category theory unifies a lot of things ; if you abstract enough, many different things start to look similar in their structures. This permits to unify different areas of mathematics.
+<br>
+<br>If we try to abstract from low-level operations, we see that programming languages take their roots from <b>lambda calculus</b>.
+<br>And we see that all our data structures form <b>types</b>.
+<br>
+<br>There is also a type theory in mathematics, invented to solve paradoxes, like Russel's paradox, which says that you cannot construct the set of all sets (can a set contain sets that don't contain themselves ?) ; it can be translated in barber's paradox (a barber shaves persons that don't shave themselves, so can a barber shave himself ?). Russel's theory of types says that sets form layers upon layers, and we cannot have all sets and put them in one big set. This evolved to Marin Löf type theory, very formal.
+<br>
+<br>And there was logic ; people realized that these distinct areas of mathematics are exactly the same ; this is called the <b>Curry–Howard-Lambek isomorphism</b>, which says that whatever you do in logic can be directly translated into whatever you do in type theory. They are not similar, they are exactly the same, there is a one to one correspondance. And the Lambek part of this isomorphism says that there are certain types of categories (cartesian complete categories) that totally describe the same thing.
+<br>
+<br>Essentially all our human activity is described by one theory. One may turn philosophical, saying that we are not creating mathematics, but discovering them ; think that mathematicians discovered a deep truth about the universe.
+<br>A simpler explanation could be that categories reflect the way we function. We have a very elaborate visual system : our ability to interpret what we see from the outer world comes from billions of years of evolution. In contrast, the ability of our brain to think abstractly is very recent. Doing maths and science is a very fresh ability. This ability comes from the necessity to organize ourselves for activities like hunting, using coordination and language. Compared with the complexity of our visual cortex, this ability is very fresh and still primitive.
+<br>
+<br>Dividing a large problem in smaller pieces and combine the solutions into larger solutions is a so common process that we don't even notice it. This is how we do science as well. But we cannot assume that this reflects the deep nature of the universe. Physics of particles shows that at a certain level of detail, things are not separable. So maybe separation is only a property of our brains. So maybe category theory is not about maths, but about how our brains work ; about epistemology (how we approach things) and not ontology (how things are).
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

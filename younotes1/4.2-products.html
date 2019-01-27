@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>4.2: Products | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="4.1-terminal-and-initial-objects.html">&larr;</a>
+    <a class="next" title="Next" href="5.1-coproducts-sum-types.html">&rarr;</a>
+</nav>
+
+
+<h1>4.2: Products</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=Bsdl_NKbNnU">this youtube video</a></div>
+
+<h2>Complement on terminal objects</h2>
+
+We said that there is a unique incoming arrow from every object to a terminal object, but said nothing about outgoing arrows. There are usually outgoing arrows, and these arrows help us to defined the <b>generalized elements</b> in other objects.
+<br>Every arrow from the terminal object to an other object is a definition of a generalized element in this other object.
+<br>This happens in the Set category : when you map a singleton set to an other set, that's equivalent of picking one element in this set : the element of the singleton set is mapped to a particular element of the other set. There are many morphisms and each of them picks a different element.
+<br>So we can generalize this to other categories saying that if I have a terminal object in a category and morphisms from terminal to other objects, it's like picking an element in the other object, without knowing what an element is.
+<br>It's important because there are many categories similar to the category of sets, and if they have a terminal object, it provides a way of picking elements.
+
+<h2>Opposite category</h2>
+
+When we saw universal constructions of terminal and initial objects, we studied in detail terminal objects, and skipped initial objects saysing that it's the same if we invert the arrows.
+<br>This trick of inversing arrows has a deep meaning. Every construction in category theory has its opposite construction that is done by reversing arrows. For example, defining a terminal object gives for free the definition of the initial object by repeating the same thing with inverted arrows..
+<br>This property is related to the fact that for any category wa can always create a new category identical to the first, but with arrows reversed.
+<br>This new category is called the <b>opposite category</b> and is noted <span class="formula">C<sup>op</sub></span>
+<br>The inverse of a function <code>f</code> is noted <span class="formula">f<sup>op</span>
+<br>from every arrow <code>f</code> going from <code>a</code> to <code>b</code> there is an arrow <code>f<sup>op</sup></code> going from <code>b</code> to <code>a</code>.
+
+<img src="img/opposite-category.jpg" alt="Opposite category">
+
+But how do we know that C<sup>op</sup> is a category ?
+<ul>
+    <li>
+        <b>Composition</b> : if we have two arrows <code>f :: a &rarr; b</code> and <code>g :: b &rarr; c</code>, we have their composition <code>g o f :: a &rarr; c</code>.
+        <br>We can associate to <code>g o f</code> in the new category <code>(g o f)<sup>op</sup> :: c &rarr; a</code>.
+        <div class="formula">(g o f)<sup>op</sup> = f<sup>op</sup> o g<sup>op</sup></div>
+    </li>
+    <li>
+        <b>Identity</b> : when we invert identity, we have identity again.
+    </li>
+    <li>
+        <b>Associativity</b> comes automatically
+    </li>
+</ul>
+
+So instead of defining the initial object in category <code>C</code> we could say that the initial object is the terminal object in the opposite category.
+
+<h2>Product</h2>
+In the ancient world of set, there is something called the <b>cartesian product</b>.
+
+<img src="img/product1.jpg" alt="Cartesian product 1">
+The cartesian product of two sets <code>a</code> and <code>b</code> is the set of pairs composed by an element of <code>a</code> and an element of <code>b</code>.
+<br>For example a plane is the cartesian product of x and y axis.
+
+<img src="img/product2.jpg" alt="Cartesian product 2">
+
+To express cartesian product in terms of categories, what are the properties ?
+<br>For every cartesian product of two sets, there are these two special functions called <b>projections</b>.
+<br>In Haskell, they are called first (<code>fst</code>) an second (<code>snd</code>).
+
+<img src="img/product3.jpg" alt="Cartesian product 3">
+
+So here we have a pattern : <code>a</code> and <code>b</code> are fixed ; the pattern is : pick an object <code>c</code> which has two arrows, one going to <code>a</code> and one going to <code>b</code>. <code>c</code> might be a cartesian product, but we don't know. There may be many other such <code>c</code>. One of them is the cartesian product, which one is the correct one ?
+<br>Universal construction to the rescue, we need to be able to rank them.
+
+<img src="img/product4.jpg" alt="Cartesian product 4">
+
+We say that <code>c</code> is better than <code>c'</code> if there is a unique morphism <code>m</code> from <code>c'</code> to <code>c</code> such as
+<br><span class="formula">p o m = p'</span> and <span class="formula">q o m = q'</span>
+<br>With multiplication we would say that <code>p'</code> factorizes <code>p</code> into <code>p</code> times <code>m</code> and <code>q'</code> factorizes <code>q</code> into <code>q</code> times <code>m</code>.
+<br><code>p'</code> and <code>q'</code> have a common factor, <code>m</code>.
+<br><code>m</code> takes the worst of these two projections, condenses them ; <code>m</code> can shrink stuff or not cover. All the non-injectivity or non-surjectivity is concentrated into <code>m</code>.
+<br>
+<br>Back to programming : the real product of <code>a</code> and <code>b</code> is a pair of type <code>(a, b)</code> in Haskell ; expressed as <code>&lt;a,b></code> in C++
+<br>With these two projections 
+<br><code>fst(a, _) = a</code>
+<br><code>snd(_, b) = b</code>
+<br><code>a = Int</code> ; <code>b = Bool</code> ; the product is a pair <code>(Int, Bool)</code>
+<br>
+<br>Examples of bad product : 
+<br>
+<br>Type <code>Int</code> is a bad candidate for product, but it has projections :
+<br><code>p' :: Int &rarr; Int</code>, for example <code>p' = Id</code>
+<br><code>q' :: Int &rarr; Bool</code>, for example <code>q' = True</code>
+<br>So what is the projection <code>m</code> ?
+<br><code>m :: Int &rarr; (Int, Bool)</code>
+<br><code>m x = (x, True)</code>
+<br><code>m</code> is bad because non surjective, it misses the pairs <code>(Int, False)</code>
+<br>
+<br>An other bad candidate is a triple <code>(Int, Int, Bool)</code>
+<br>We can define projections too :
+<br><code>p' :: (Int, Int, Bool) &rarr; Int</code> ; for example <code>p'(x, _, _) = x</code>
+<br><code>q' :: (Int, Int, Bool) &rarr; Bool</code> ; for example <code>q'(_, _, b) = b</code>
+<br>So what is the projection <code>m</code> ?
+<br><code>m :: (Int, Int, Bool) &rarr; Bool</code>
+<br><code>m(x, y, b) = (x, b)</code>
+<br><code>m</code> is bad because non injective
+<br>Each candidate has a flaw, and we can distill these flaws in <code>m</code>.
+<br>
+<br>The definition of product is :
+<br>
+<div style="display:inline-block; border:1px solid black; margin:1em 0 1em 2em;">
+    <div style="float:left; padding:1em 0 1em 0;">
+        <img src="img/product4.jpg" alt="Cartesian product 4" />
+    </div>
+    <div style="float:left; padding:1em;">
+        A categorical product of two objects <code>a</code> and <code>b</code> is a third object <code>c</code> with two projections
+        <br><code>p :: c &rarr; a</code>
+        <br><code>q :: c &rarr; b</code>
+        <br>Which has the universal property :
+        <br>For any object <code>c'</code> with projections
+        <br><code>p' :: c' &rarr; a</code>
+        <br><code>q' :: c' &rarr; b</code>
+        <br>There is a unique morphism <code>m :: c' &rarr; c</code> such as 
+        <br><code>p' = p o m</code>
+        <br><code>q' = q o m</code>
+    </div>
+</div>
+
+
+<br>Saying that <code>p' = p o m</code> and <code>q' = q o m</code> is equivalent to say that the diagram <b>commutes</b>.
+<br>We say that a diagram commutes if two paths give the same results.
+<br>
+<br>Not every category has product, and if it has, maybe it doesn't have it for any pair of objects.
+<br>In the category of sets, every two sets have a product.
+<br>If we want to imitate Set category, we will want to have categories which have initial objects, terminal objects, product and coproduct.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

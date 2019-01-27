@@ -1,0 +1,55 @@
+
+
+This contains the history of the initial repository
+Re-initialized the repo to remove heavy files and supplementary content about categories.
+
+
+* b9e1091 - (2019-01-27 22:07:00 +0100) Remove all content different from Milewski notes - Thierry (HEAD -> master, origin/master)
+* 6f18b62 - (2018-12-09 16:58:15 +0100) Début notes conférence Laurent Lafforgue sur la notion de vérité selon Grothendieck - Thierry (larzac/master)
+* 14cd705 - (2018-11-27 11:11:58 +0100) Typos on topo sur les topos - Thierry
+* 314abef - (2018-11-27 10:51:17 +0100) Small tweaks - Thierry
+* 23ebbfb - (2018-11-17 23:55:45 +0100) Clean CSS, format Milewski until 2.1 - Thierry
+* ec7164e - (2018-11-17 10:21:26 +0100) Notes from Connes -un topo sur les topos - Thierry
+* c36c8d5 - (2018-11-10 17:08:21 +0100) Modify tags and style for navigation + integration to tig12.net - Thierry
+* 5f6a4bd - (2018-10-22 01:57:15 +0200) Begin Caramello, Introduction to categorical logic - Thierry
+* 4971eb0 - (2018-10-08 09:36:49 +0200) French course, intro categories - Thierry
+* da21e81 - (2018-09-22 18:36:33 +0200) Prepare caramello, complete milewski part III list, corrections on milewski part I - Thierry
+* c5f4447 - (2018-08-09 19:29:39 +0200) Restructure directories ; prepare french course - Thierry
+* 1cf4add - (2018-08-01 15:04:04 +0200) Modify index.html and README - Thierry
+* 7a2fd43 - (2018-07-30 17:56:34 +0200) Add README - Thierry
+* 5194c43 - (2018-07-30 02:12:57 +0200) Format 2.1 and 2.2 - Thierry
+* 9f7bab1 - (2018-06-15 02:17:05 +0200) Continue 7.2 - Thierry
+* ab48c36 - (2018-06-14 08:50:25 +0200) Continue 7.2 - Thierry
+* c84ab5e - (2018-06-06 00:24:00 +0200) Start 7.2: Monoidal Categories, Functoriality of ADTs, Profunctors - Thierry
+* 2c26946 - (2018-06-05 09:52:03 +0200) End 7.1 - Thierry
+* cb36f11 - (2018-06-04 14:09:48 +0200) Continue 7.1 - Thierry
+* aacf03f - (2018-06-02 19:37:48 +0200) Start 7.1: Functoriality, bifunctors - Thierry
+* b4d24f2 - (2018-06-02 18:02:47 +0200) End 6.2 - Thierry
+* 15a3ec7 - (2018-06-01 21:14:25 +0200) Continue 6.2 - Thierry
+* 96ed4a3 - (2018-05-31 21:00:07 +0200) End 6.1, begin 6.2: Functors in programming - Thierry
+* 48a642a - (2018-05-31 08:20:58 +0200) Begin 6.1 - Functors - Thierry
+* 5def260 - (2018-05-30 03:57:39 +0200) Format code and fix typos - Thierry
+* c7feffa - (2018-05-29 21:23:00 +0200) Format code - Thierry
+* c8f42df - (2018-05-29 17:18:17 +0200) Fix typos - Thierry
+* a331619 - (2018-05-29 15:13:44 +0200) 5.2: Algebraic data types - Thierry
+* 8c24c85 - (2018-05-29 12:08:00 +0200) 5.1: Coproducts, sum types - Thierry
+* 6b8f353 - (2018-05-29 09:07:44 +0200) End 4.2 - Thierry
+* 91f9de8 - (2018-05-28 17:03:07 +0200) Start 4.2 : Products - Thierry
+* 322d285 - (2018-05-28 12:00:57 +0200) End 4.1 - Thierry
+* 02fe188 - (2018-05-26 02:27:59 +0200) Adapt index - Thierry
+* e1b35fd - (2018-05-26 01:51:06 +0200) Change repository name - Thierry
+* fb21cec - (2018-05-26 01:48:26 +0200) Corections to 3.2 Kleisli - Thierry
+* 9995419 - (2018-05-24 17:32:02 +0200) Begin 4.1: Terminal and initial objects - Thierry
+* 7ba2a7e - (2018-05-24 12:44:30 +0200) Refactor index - Thierry
+* cdab767 - (2018-05-24 12:13:02 +0200) Add navigation between pages, prepare following pages - Thierry
+* e9bd396 - (2018-05-23 22:10:27 +0200) End 3.2 - Thierry
+* 39e849e - (2018-05-23 12:04:06 +0200) Begin 3.2 : Kleisli category - Thierry
+* 6c8a965 - (2018-05-23 09:00:59 +0200) End 3.1 - Thierry
+* 9556c4a - (2018-05-23 00:13:35 +0200) Continue 3.1 - Thierry
+* bc4ada8 - (2018-05-21 23:36:12 +0200) Begin 3.1 : Examples of categories, orders, monoids - Thierry
+* 4701a0c - (2018-05-21 09:07:37 +0200) 2.2 Monomorphisms, simple types - Thierry
+* 6f412fa - (2018-05-20 23:32:05 +0200) End 2.1 - Thierry
+* ad3144a - (2018-05-19 23:22:26 +0200) Continue 2.1 - Thierry
+* bad8438 - (2018-05-18 09:26:36 +0200) Continue 2.1 - Thierry
+* 24c9857 - (2018-05-18 00:24:32 +0200) Begin 2.1 functions, epimorphisms - Thierry
+* 47bcbed - (2018-05-17 15:18:13 +0200) Initial commit, en/1.1 and 1.2 - Thierry

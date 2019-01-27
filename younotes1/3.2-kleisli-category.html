@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>3.2: Kleisli category | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="3.1-examples-orders-monoids.html">&larr;</a>
+    <a class="next" title="Next" href="4.1-terminal-and-initial-objects.html">&rarr;</a>
+</nav>
+
+
+<h1>3.2: Kleisli category</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=i9CU4CuHADQ">this youtube video</a></div>
+
+<h2>Inclusion</h2>
+
+This deals with an interesting case to study.
+<br>Let's define a relation on sets, the relation of <b>inclusion</b>. For a set, being a subset of an other set is a relation that we note <span class="formula">&sube;</span>.
+<br>What kind of relation is it ? An order, a preorder ?
+<br>Every set is a subset of itself, so we have identity (in terms of orders, we say it is reflexive).
+<br>It is transitive : if a is <code>a</code> subset of <code>b</code> and <code>b</code> is a subset of <code>c</code> then a is <code>a</code> subset of <code>c</code>.
+<br>And the associativity is obvious.
+<br>
+<br>So this is a preorder.
+<br>This is a partial order because there may be loops : <span class="formula">if a &sube; b &#8896; b &sube; a &rArr; a = b</span>.
+<br>This is not a total order because there may exist disjoint sets or sets that partially overlap.
+<br>We can have a diamond situation : 
+<div>
+    <img src="img/diamond1.jpg" alt="" />
+    <img src="img/diamond2.jpg" alt="" />
+</div>
+
+We have a category based on sets where the arrows are not functions, but relations. Some versions of this category is used in modeling topology ; open sets have this property of inclusion.
+
+<h2>Kleisli category</h2>
+
+This is a category based on the category of types and functions.
+<br>We can get to this category by solving a programming problem :
+<br>We maintain a library of functions and a new requirement comes : every function must be auditable : every function has to create a log "I was called".
+<br>The simplest solution that comes to mind of imperative programmers is creating a global log.
+So we have in C++
+<div><pre>string log = "";</pre></div>
+If we have a function 
+<div><pre>
+bool negate(bool x){
+    return !x;
+}
+</pre></div>
+To add a trace in the log, we can modify it :
+<div><pre>
+bool negate(bool x){
+    log += "not!";
+    return !x;
+}
+</pre></div>
+
+This looks simple, but is it really simple ?
+<br>It introduces a <i>hidden dependency</i> between the bodies of our functions a the global log.
+<br>This can't be seen if we look at the signature of <code>negate</code> : it just takes a <code>bool</code> and returns a <code>bool</code>.
+<br>If we remove the declaration of the global log, all the functions are broken without touching them.
+<br>But let's keep that solution.
+<br>
+<br>It works until a new requirement comes : "Our library must be usable in a multi-threaded environment".
+<br>So let's have a global lock ! But locks don't compose, so we can generate dead-lock situations.
+<br>We are then obliged to deal with the complexity hidden behind this apprently simple solution.
+<br>
+<br>This could not happen in Haskell as all functions are supposed to be pure.
+<br>In C++, this could be implemented as a pure function :
+
+<div><pre>
+pair&lt;bool,string> negate(bool x, string log){
+    return make_pair(!x, log + "not!");
+}
+</pre></div>
+
+OK, this function is pure, there is no side effects, but it's a bit awkward :
+<ul>
+    <li>
+        We saw that a function is pure if it can be memoized.
+        <br>Memoizing the first version of the function is easy, the argument is a boolean so the lookup table contains two elements.
+        <br>For the second version, memoizing the boolean argument is easy, but for the string argument, every time we call it with a diffferent string we have a different result. So to memoize it we should consider all the possible different history of calls.
+    </li>
+    <li>
+        An other problem is the use of <code>+</code> in the code <code>log + "not!"</code>.
+        <br>Why should a function like negate should know about appending strings ? It acts locally but it has this element of knowledge that is outside of its scope. The principle of separation of concerns is not respected.
+    </li>
+</ul>
+
+This solution would resolve the preceeding issues :
+<div><pre>
+pair&lt;bool,string> negate(bool x){
+    return make_pair(!x, "not!");
+}
+</pre></div>
+
+But then who does the concatenation of the log ?
+<br>What do we do with these functions ? We compose them.
+<br>
+<br>We can modify the way we compose these functions.
+<br>
+<br>Let's define a new way of composing functions that will take care of composing functions that return these pairs.
+<br>With regular composition, we would write :
+<div><pre>
+function &lt;c(a)> compose(function&lt;b(a)> f, function&lt;c(b)> g){
+    return [f, g](a x){
+        auto p1 = f(x);
+        auto p2 = g(p1);
+        return p2;
+    }
+}
+</pre></div>
+
+<ul>
+    <li>
+        <code>a</code>, <code>b</code> and <code>c</code> are types.
+    </li>
+    <li>
+        The function <code>compose()</code> returns a function which takes an argument of type <code>a</code> and returns an object type <code>c</code>.
+    </li>
+    <li>
+        <code>compose()</code>'s arguments are two functions :
+        <br><code>f</code> - takes an argument of type <code>a</code> and returns an object type <code>b</code>
+        <br><code>g</code> - takes an argument of type <code>b</code> and returns an object type <code>c</code>
+    </li>
+    
+</ul>
+
+That's a higher order function, something new in C++ and java, having functions as arguments and returning function and creating them on the spot.
+<br>
+<br>But we want functions that return pairs (embellished functions)
+<div><pre>
+function &lt;pair&lt;c, string>(a)> compose(function&lt;pair&lt;b, string>(a)> f, function&lt;pair&lt;c, string>(b)> g){
+    return [f, g](a x){
+        auto p1 = f(x);     // p1 is a pair now
+        auto p2 = g(p1.first);
+        return make_pair(p2.first, p1.second + p2.second); // log concatenation done here
+    }
+}
+</pre></div>
+
+This new way of composing function takes care of appending the log.
+<br>
+<br>Do we have a category with this composition ?
+<ul>
+    <li>
+        Is it associative ? In the first parts of the pairs, we are just doing regular composition, which was associative before.
+        <br>In the second parts, we do string concatenation, which is associative.
+    </li>
+    <li>
+        Identity is
+<div><pre>
+function pair&lt;a, string> id(a x){
+    return make_pair(x, "");
+}
+</pre></div>
+        String concatenation is a binary operator that is associative and has a unit. So this works for any monoid.
+    </li>
+</ul>
+
+So we have a category whose objects are types a, b, c... and arrows are not regular functions.
+<br>An arrow from a to b is a function from a to a pair (b, string), an embellished function.
+<br>This is the Kleisli category ; its arrows (the embellished functions) are called the Kleisli arrows. Kleisli arrows can be defined for a lot of embellishements.
+<br>
+<br>This is a view of a <b>monad</b>. These arrows are composable because this embellishement is a monad.
+<br>A monad is just a way of composing special types of functions.
+<br>When we redefine composition, we have this one additional degree of freedom. If we use this additional degree or freedom, we use a monad.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

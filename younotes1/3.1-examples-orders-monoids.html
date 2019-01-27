@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>3.1: Examples of categories, orders, monoids | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="2.2-monomorphisms-simple-types.html">&larr;</a>
+    <a class="next" title="Next" href="3.2-kleisli-category.html">&rarr;</a>
+</nav>
+
+
+<h1>3.1: Examples of categories, orders, monoids</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=aZjhqkD6k6w">this youtube video</a></div>
+
+<h2>Empty category</h2>
+A category with no object and no arrow. The axioms af a category are satisfied :
+<ul>
+    <li>For any pair of composable arrows, there is an arrow going straight from <code>A</code> to <code>C</code>. If there are no pair, this is automatically satisfied.</li>
+    <li>For any object, there has to be an identity. If there is no object, it's automatically satisfied.</li>
+</ul>
+This category is noted <span class="formula">&empty;</span>.
+<br>By itself this category is useless. The value of this category is in context. In the category of all categories, or in the category of small categories, this is important (it's a terminal object).
+
+<h2>One object category</h2>
+It has at least one arrow, the identity. Also useless by itself, but useful in the context of all categories (it's also a terminal object).
+
+<h2>Free construction from a graph</h2>
+If we have a graph and want to build a category from it, we can do it by adding arrows.
+
+<img src="img/graph2category.jpg" alt="Free construction of a category from a graph">
+
+<br>- Add identity arrows for all nodes of the graph.
+<br>- Add arrows that permit composability.
+<br>And we must check that associativity is satisfied.
+<br>
+<br>For finite graphs, we get a category by adding a finite number of arrows.
+<br>
+<br>This construction in which we just keep adding stuff in order to satisfy the axioms is a very common construction in category theory.
+<br>It's called <b>free construction</b> ; free because we have no constraint other than the constraints required by the definition of a category.
+<br>Free construction can be applied to get a free group, a free monoid and so on.
+<br>
+<br>We'll see applications of free construction for our programming tasks.
+
+<h2>Orders</h2>
+Orders are categories in which arrows are not functions ; in zero and one object categories, arrows were not functions, but they are abstract arrows which do not have intuitive meaning.
+<br>In orders, arrows represent a relation. In particular an interesting relation is less or equal (<span class="formula">&le;</span>).
+<br>If we have two objets <code>a</code> and <code>b</code>, we draw an arrow from <code>a</code> to <code>b</code> if <code>a &le; b</code> (we also say "<code>a</code> comes before <code>b</code>").
+<br>
+<br>There are certain conditions an order has to fullfill in order to be an order.
+<br>And there are different types of orders : <b>preorders</b>, <b>partial orders</b>, <b>total orders</b>. We are mostly familiar with total order, because when we are sorting, we require that the elements satisfy a total order.
+
+<h3>Preorders</h3>
+
+We only require composition : if <code>a &le; b</code> and <code>b &le; c</code>, then we want <code>a &le; c</code>
+
+<img src="img/preorder.jpg" alt="Preorder">
+
+In a preorder, there is either one arrow or no arrow between two objects. There cannot be multiple arrows between two objects.
+<br>Between two osbjects means starting from one object and ending to an other object. In principle we can have an arrow going backwards too.
+<br>
+<br>Associativity is obvious.
+<br>
+<br>And there must be identity (the relation must be reflexive) ; that's why there is the "or equal".
+<br>
+<br>A category like this is called a <b>thin category</b>. Every thin category corresponds to a preorder, and every preorder corresponds to a thin category ; there is a one to one correspondance.
+<br>
+<br>If we consider all the different kinds of orders, category theory tells us that preorders are the most basic.
+<br>
+<br>The set of arrows between two objects in a category is called the <b>hom-set</b>.
+<br>The hom-set in a category C between objects a and b is noted <span class="formula">C(a,b)</span>
+<br>We can have <span class="formula">C(a,a)</span>
+<br>A hom-set is a set in the sense of set theory.
+<br>
+<br>A thin category is a category in which every hom-set has either zero or one element.
+
+<h3>Partial orders</h3>
+
+We impose additional conditions on preorder to get a partial order.
+<br>Partial order is something that has no loops : if you have an arrow from a to b, you cannot have an arrrow from b to a.
+<br>If wee look at it as a graph, it corresponds to a <b>Directed Acyclic Graph (DAG)</b>.
+
+<h3>Total Orders</h3>
+
+The additional condition is that there is one arrow between <i>every</i> object of the category.
+
+<h2>Epic and monic but not isomorphic</h2>
+
+<img src="img/epi-mono-thin-category.jpg" alt="Epimorphism and monomorphism in a thin category">
+
+Going back to the definition of epiomrphism and monomorphism in terms of equality of arrows that go from or to beginning or end of morphism, we see that this is automatically satisfied in a thin category as there is only one arrow between two objects.
+<br>So every arrow in a preorder is an epimorphism and a monomorphism at the same time. But it is not necessarily invertible. In a partial order, this is never invertible because there is no loops.
+<br>
+<br>This is a counter example : an arrow can be both an epimorphism and a monomorphism without being invertible.
+<br>This is different from functions defined with sets, were a injective and surjective function is a bijection (then invertible).
+
+<h2>Thick categories</h2>
+Categories where hom-sets have multiple arrows.
+In a thin catgory, there may be one or zero arrow ; there is or there is no relation ; a black and white world.
+<br>In a thick category, there may be multiple arrows between objects. If there are no arrows, the objects are not in relation. If there are multiple arrows, they can be seen as different proofs of the relation ; a category can be seen as a proof-relevant order.
+<br>This kind of proof-relevant stuff is becoming more and more important in homotopy type theory, which is built on the asumption that it's not only enough to show that something is related to something else, tehre are different ways to show they are related, and they are not equivalent.
+
+<h2><a name="monoids">Monoids</a></h2>
+A one-object category can have many loops. One of them is the identity
+
+<img src="img/one-object-category.jpg" alt="One object category">
+All the arrows are composable because the beginnings and ends of all arrows are the unique object.
+<br>
+<br>A category with a single object is called a <b>monoid</b>.
+<br>
+<br>Monoids are known from algebra as a set of elements and a binary operation (let's call it multiplication) with two conditions imposed :
+<ul>
+    <li>
+        There is a special element called unit (noted <code>e</code>)such as when you multiply (left or right multiplication) an element by unit, you get the same element :
+        <br><code>&exist; e | &forall; a, a * e = e * a = a</code>
+        <br>(there exists <code>e</code> such as for all <code>a</code>, <code>a * e = e * a = a)</code>)
+    </li>
+    <li>The operation is associative : <code>(a *b) * c = a * (b * c)</code></li>
+</ul>
+Examples :
+<ul>
+    <li>Natural numbers with multiplication (e = 1)</li>
+    <li>Natural numbers with addition (e = 0)</li>
+    <li>String concatenation (e = empty string) - interesting example because the operation is not symetric, like addition or multiplication</li>
+    <li>List concatenation with appending operation (e = empty list).</li>
+</ul>
+
+Monoids defined in terms of sets and monoids defined in category theory are equivalent.
+<br>If we call <code>M</code> the monoid defined as a catgory, <code>M</code> has only one hom-set ; <code>M(m, m)</code> is the set of arrrows that start and end at <code>m</code>.
+<br>This hom-set is a set.
+<ul>
+    <li>
+        So we can go from our category <code>M</code> to a monoid defined in terms of set theory : the category defines a set <code>M(m, m)</code> ; taking two elements from this set (which correspond to two arrows), there is a third element which corresponds to the composition of theses arrows ; the composition corresponds to the multiplication. And one of the elements of the set corresponds to identity, which is automatically a unit. And it's associative.
+    </li>
+    <li>
+        And vice-versa if we start with a monoïd in set theory, we can create a category and define composition using the multiplication.
+    </li>
+</ul>
+So there is a one to one correspondance ; these are the same things seen from two different perspectives.
+
+<img src="img/monoid-set-category.jpg" alt="Equivalence of monoid defined as a set and a category">
+
+For example, to express the addition in natural numbers as a category, we would have one a arrow which corresponds to adding 5, one arrow corresponding to adding 2, and their composition corresponds to adding 7.
+<br>
+<br>Back to programming, the category of types corresponds to a system that is strongly typed. You cannot compose any two functions, you can compose only functions that match ; the result of one function must have a type that is the same as the argument to the next functioon.
+<br>A momoid is a very special category in which any two functions are composable ; that corresponds to languages which have weak typing.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

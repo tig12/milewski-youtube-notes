@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>1.2: What is a category | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="1.1-motivation-philosophy.html">&larr;</a>
+    <a class="next" title="Next" href="2.1-functions-epimorphisms.html">&rarr;</a>
+</nav>
+
+
+<h1>1.2: What is a category ?</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=p54Hd7AmVFU">this youtube video</a></div>
+
+<br>The major tools we have at our disposition are :
+<ul>
+    <li><b>Abstraction</b> : forget about unecessary details so that things that appear different may look identical.</li>
+    <li><b>Composition</b></li>
+    <li><b>Identity</b> : because of abstraction, this notion is not trivial ; some things are strictly identical, and some are identical for certain purposes. In mathematics, homotopy type theory is based on distinguishing between what is identical from what is not. Things that are almost equal are called <b>isomorphic</b>.</li>
+</ul>
+Composition and identity define category theory.
+<br>
+<br>A category is a <i>bunch</i> of objects. We don't use the term <i>set</i> because it has a precise mathematical meaning, and some categories are not a set of objects. Some things are bigger than sets.
+<br>If the objects form a set, then the category is called <i>small</i> ; if they don't form a set then it's a <i>large</i> category.
+<br>The arrows form a set (categories where the arrows don't form a set but are objects of a category are called higher-order categories).
+<br>
+<br>So a category is a bunch of <b>objects</b> and <b>arrows</b> (or <b>morphisms</b>) between objects.
+<br>An object is a primitive in this theory ; it has no properties, no internal structure.
+<br>A morphism is also a primitive, it has no properties, except that an arrow has a beginning and end.
+<br>Objects serve only to identify the ends of arrows.
+<br>Notice how this is related to human perception. Hunters were using arrows ! We are used to localize things in space. Arrows express the notion of movement, they are related to social relations between individuals. This language constrains us.
+<br>
+<br>When we define a category, we specify what the objects are, and for each pair of objects what are the arrows between them.
+<br>There may be from zero to an infinity of arrows between two objects. So it's OK to talk of a category as a graph if we admit that there can be an infinity of nodes and an infinity of edges.
+<img class="margin border" src="img/category.jpg" alt="General aspect of a category">
+There may be arrows going from <code>a</code> to <code>b</code>, and from <code>b</code> to <code>a</code>, and from <code>a</code> to <code>a</code>. 
+<br>There may be many different arrows going from <code>a</code> to <code>a</code>.
+
+<!-- ********************************************************************************* -->
+<h2>Properties</h2>
+
+<!-- ************************************* -->
+<h3>Composition</h3>
+A property expresses composition :
+<div class="margin">
+If there is an arrow <code>f</code> from <code>a</code> to <code>b</code>
+<br>and an arrow <code>g</code> from <code>b</code> to <code>c</code>,
+<br>then there must exist an arrow from <code>a</code> to <code>c</code>
+<br>that is identical to the composition of <code>f</code> and <code>g</code>.
+</div>
+
+This arrow is written <span class="formula">g o f</span>, and called <span class="formula">g after f</span>.
+<br>
+<br>There might be multiple arrows going from <code>a</code> to <code>c</code>, but <code>g o f</code> is the composition of <code>f</code> and <code>g</code>.
+<img class="margin border" src="img/composition.jpg" alt="Category composition">
+<br>
+For evey pair of <i>composable</i> arrows, their composition <b>must</b> exist.
+<br><b>Composable</b> means that the end of one is the beginning of the other.
+<br>Here we see the importance of the objects to identify the end and the beginning of the arrows.
+<br>
+<br>So composition is part of the definition of the category ; it must include the definition of composition for every composable pair of arrows, like a big multiplication table.
+
+<!-- ************************************* -->
+<h3>Identity</h3>
+
+An other property expresses identity : for every object <code>a</code>, there <b>must</b> exist an arrow going from <code>a</code> to <code>a</code>, called <code>id<sub>a</sub></code>.
+<img class="margin border" src="img/identity.jpg" alt="Identity in a category">
+
+It is an identity in the sense of composition : if we have an arrow <code>f</code> from <code>a</code> to <code>b</code> then we <b>must</b> have :
+
+<div class="flex margin">
+    <img class="border" src="img/idb.jpg" alt="Left identity">
+    <div class="padding"><span class="formula">id<sub>b</sub> o f = f</span> (left identity)</div>
+</div>
+and
+<div class="flex margin">
+    <img class="border" src="img/ida.jpg" alt="Right identity">
+    <div class="padding"><span class="formula">g o id<sub>a</sub> = g</span> (right identity)</div>
+</div>
+
+<!-- ************************************* -->
+<h3>Associativity</h3>
+
+If we have
+<ul class="naked margin0">
+    <li>an arrow <code>f</code> from <code>a</code> to <code>b</code>,</li>
+    <li>an arrow <code>g</code> from <code>b</code> to <code>c</code>,</li>
+    <li>an arrow <code>h</code> from <code>c</code> to <code>d</code>,</li>
+</ul>
+then we must have :
+
+<div class="margin05"><span class="formula">h o (g o f) = (h o g) o f</span></div>
+So we can just omit parentheses.
+
+<img class="margin" src="img/associativity.jpg" alt="Category associativity">
+
+Some theories were deveoped where associativity is weak (both terms of the associativity equation are not identical but only isomorphic).
+
+<!-- ********************************************************************************* -->
+<h2>The <code>Set</code> category</h2>
+
+<div class="big2">Objects are types, and arrows are functions.</div>
+<br>A function is an arrow between two types.
+<br>Any single-argument function takes an argument of type <code>a</code> and returns a result of type <code>b</code>.
+<br>In this sense an function is an arrow between two types.
+<br>
+<br>The simplist model for types is that they are just sets of values.
+<br>So we can model programming as a category of sets ; functions are just mathematical functions, defined  between sets.
+<br>
+<br>A lot of categories come from some model.
+<br>For example you take set theory and represent the sets as objects in a category ; this category is called <code><b>Set</b></code>.
+<br>We have sets that have a structure that we know, they have elements.
+<br>When we build the <code><b>Set</b></code> category, <b>we forget the structure of the sets</b>, they are just objects, without structure.
+<br>We also know the functions between the sets. In the Set category, each function becomes an arrow.
+<br>Arrows in a category are also atomic, without structure. <b>We forget the knowledge we have about these functions</b>.
+<br>
+<br>This defines a category because functions can be composed, this composition is associative, and we can define an identity function for each set : the function which associates each element of a set to itself.
+<br>
+<br>So we forget about the structures of the sets and the functions, we just have these morphisms. And using only this, we can say a lot of things about the objects. For example, we can know that a set is empty, that it has only one element.
+<br>
+<br>This gives a completely new way of looking at things, more abstract.
+<br>
+<br>If you think about what's inside the sets, how the elements are mapped, this is assembly language, plumbery. With categories, you don't look inside, you just look at how they are connected.
+<br>
+<br>This achieves the ultimate in data hiding : you have a data type shrunk to a point, and you only know its interface, how it connects to other objects.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+
+</body>
+</html>

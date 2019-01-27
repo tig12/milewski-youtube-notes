@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>5.2: Algebraic data types | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="5.1-coproducts-sum-types.html">&larr;</a>
+    <a class="next" title="Next" href="6.1-functors.html">&rarr;</a>
+</nav>
+
+
+<h1>5.2: Algebraic data types</h1>
+
+<div>Notes from <a href="">this youtube video</a></div>
+
+
+<h2>Product</h2>
+
+Why is it an algebra ?
+<br>We have products and sums just like in algebra.
+<br>Product is sort of multiplication. It means that we have at least a <b>monoid</b>.
+<br>A monoid has an operation (here multiplication) that is associative and has a unit.
+<br>But does the product in types behave like multiplication ?
+
+<ul class="spaced">
+    <li><b>Symetry</b> (this is not needed for a monoid)
+        <br>The product of numbers is symetric, but this is not true for the product of two types :
+        <br>If we have types <code>a</code> and <code>b</code>, the pair <code>(a, b)</code> is different from <code>(b,a)</code>. However they contain the same information, which means that they are isomorphic ; the isomorphism is called <code>swap</code>.
+<div><pre>
+swap :: (a, b) &rarr; (b, a)
+swap p  = (snd p, fst p)
+</pre></div>
+        The inverse of <code>swap</code> is <code>swap</code>.
+        <br>So multiplication is symetric up to isomorphism.
+    </li>
+
+    <li>
+        <b>Associativity</b>
+        <br>Are <code>((a, b), c)</code> and <code>(a, (b, c))</code> equivalent ? No.
+        <br>No but these two types contain the same information, but re-arranged ; they are isomorphic.
+        <div><pre>assoc :: ((a, b), c) = (a, (b, c))</pre></div>
+        This function is an isomorphism, it has an inverse.
+        <br>Associativity means that we can omit parentheses and simply write <code>(a, b, c)</code>.
+        <br>So we just have tuples ; structs or records with multiple fields are just examples of this.
+        <br>In classical algebra, this corresponds to <code>(a * b) * c = a * (b * c)</code>
+    </li>
+    
+    <li>
+        <b>Unit</b>
+        <br>What would be the type, which paired with any other type would give the same type ? This type should have only one element.
+        <br><code>(a, ())</code> is isomorphic to <code>a</code>.
+<div><pre>
+munit(x, ()) = x
+munit_inv(x) = (x, ())
+</pre></div>
+        It's like taking the cartesian product of a line and a point, it gives a line (not exactly the same line).
+        <br>What we did for right unit can be done for left unit.
+        <br>In classical algebra, this corresponds to <code>a * 1 = a</code>
+    </li>
+</ul>
+
+So we have a monoid with respect to product.
+
+<h2>Sum</h2>
+
+<ul class="spaced">
+    <li>
+        <b>Symetry</b>
+        <br><code>Either a b ~ Either b a</code> ; isomorphic
+    </li>
+    
+    <li>
+        <b>Associativity</b>
+        <br>Similarily it is also associative up to isomorphism.
+        <br>If we want to associate Eithers we can write data structures like
+        <div><pre>data Triple = Left a | Middle b | Right c</pre></div>
+    </li>
+    
+    <li>
+        <b>Unit</b>
+        <br>The unit of sum is <code>Void</code>.
+        <br><code>Either a Void</code> is isomorphic to a.
+        <br>In classical algebra, corresponds to <code>a + 0 = a</code>.
+    </li>
+</ul>
+
+<h2>Algebra</h2>
+
+So we have a second monoid. That's not all, we would like to combine these two monoids into something bigger.
+<br>
+<br>From algebra we have <code>a * 0 = 0</code>
+<br>Is it true with types ? Is <code>(a, Void)</code> isomorphic to <code>Void</code> ?
+<br>Constructing a pair (a, Void) is impossible because we can't give an element of type <code>Void</code> ; this pair is inhabited, which is the same as <code>Void</code>.
+<br>
+<br>From algebra we also have distributivity : <code>a * (b + c) = a * b + a * c</code>.
+<br>This is true, up to an isomorphism : <code>(a, Either b c) ~ Either (a, b) (a, c)</code>.
+<br>
+<br>A structure lke this in algebra is called a <b>ring</b>, except that in a true ring, addition and multiplication have an inverse. Here we don't know how to substract something or divide by something.
+<br>A structure like that is called a <b>rig</b> or <b>semi-ring</b>.
+<br>
+<br>What is the correspondance of <code>2 = 1 + 1</code> ?
+<br>1 is the unit type. There are two possible values : left unit or right unit. We can call left unit <code>true</code>, and right unit <code>false</code>. 2 is isomorphic to a boolean.
+<br>
+<br>What is the correspondance of <code>2 = 1 + a</code> ?
+<br>This is <code>Maybe</code> :
+<br><code>data Maybe a = Nothing | Just a</code>.
+<br>This has two constructors ; <code>Nothing</code> takes no argument, so it's equivalent to Unit.
+<br>So <code>Maybe a</code> is equivalent to <code>Either () a</code>.
+<br>
+<br>Let's see an equation :
+<br><code>l(a) = 1 + a * l(a)</code>
+<br>Which can be solved as follows :
+<br><code>l(a) - a * l(a) = 1</code>
+<br><code>l(a) * (1 - a) = 1</code>
+<br><code>l(a) = 1 / (1 - a)</code>
+<br>
+<br>Expressed as type, this gives :
+<br><code>data List a = Nil | Cons a (List a)</code>
+<br>A list of <code>a</code> is either empty or it's a Cons of head and tail.
+<br><code>List</code> a is a sum constructor (|)
+<br><code>Nil</code> is a constructor that takes no argument, which corresponds to Unit type.
+<br><code>Cons</code> is a product constructor, it takes two types as arguments.
+<br>
+<br>To solve this equation with types, we cannot do division or substraction.
+<br>But <code>l(a) = 1 / (1 - a)</code> happens to be the sum of a geometric sequence : <code>1 + a + a*a + a*a*a + ...</code>
+<br><code>1</code> corresponds to empty list ; <code>a</code> is a singleton list ; <code>a*a</code> is a list of 2 elements ; <code>a*a*a</code> is a list of 3 elements...
+<br>With this equation we have defined all possible lists.
+<br>
+<br>The equation : <code>l(a) = 1 + a * l(a)</code> can be solved by substitution :
+<br>Using classical algebraic notation :
+<br><code>l(a) = 1 + a * (1 + a * l(a)) = 1 + a + a * a * (1 + a * l(a))</code> ...
+<br>This is a way of doing the same thing without doing the power series.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

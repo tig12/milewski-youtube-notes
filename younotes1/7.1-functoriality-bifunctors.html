@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>7.1: Functoriality, bifunctors | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="6.2-functors-in-programming.html">&larr;</a>
+    <a class="next" title="Next" href="7.2-monoidal-categories-functoriality-of-adts-profunctors.html">&rarr;</a>
+</nav>
+
+
+<h1>7.1: Functoriality, bifunctors</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=EO86S2EZssc">this youtube video</a></div>
+
+<h2>The category <code>Cat</code></h2>
+
+<img src="img/functor-composition.jpg" alt="Functor composition">
+
+Functor composition is easy to define. As functors are defined in terms of functions (in small categories), it just follows the rules of function composition.
+<br>As each functor preserves structure, the composition also preserves structure.
+<br>The composition of functors <code>F</code> and <code>G</code> is noted <code>G o F</code>.
+<br>
+<br>The identity functor maps everything to itself. It is necessarily an endofunctor.
+
+<img src="img/identity-functor.jpg" alt="Identity functor">
+
+It is an identity with respect to composition of functors.
+<br>
+<br>Whatever we know about function composition applies to functor composition : associativity, identity...
+<br>So <i>it is a category</i> in which functors are morphisms and categories are objects.
+<br>Such a category is called <code style="font-size:1.4em; font-weight:bold;">Cat</code>.
+<br>We won't see what happens when a category is large for the moment.
+
+<h3>Example : combining <code>Maybe</code> and <code>List</code></h3>
+
+This is useful, for example for function <pre>tail :: [a] &rarr; [a]</pre> which throws away the first element of a list.
+<br>It is not defined for empty list.
+<br>Let's define <pre>SafeTail :: [a] &rarr; Maybe [a]</pre>
+<br>It returns a list <code>[a]</code> or <code>Nothing</code> if the list is empty (<code>Nothing</code> is like an exception code).
+<div><pre>
+SafeTail [] = Nothing
+SafeTail (x:xs) = Just xs
+</pre></div>
+<code>x</code> is the head of the list, of type <code>a</code>.
+<br><code>xs</code> is the tail of the list, of type <code>[a]</code>.
+<br>
+<br>We have applied two functors, one on top of an other. We have composed the <code>Maybe</code> functor after the <code>List</code> functor.
+<br>So <code>Maybe List</code>, a composition of two functors, is also a functor.
+<br>
+<br>How to apply the function square to the contents of this <code>Maybe List</code> ? We could implement dealing with all the particular cases (<code>Nothing</code>), but we have already defined the functions <code>fmap</code>.
+<div><pre>
+mis :: Maybe[Int]
+sq :: Int &rarr; Int
+</pre></div>
+<code>fmap</code> goes under the functor and applies. Here under <code>Maybe</code> is a <code>List</code>, so to apply <code>sq</code> we must use <code>fmap</code> to this list.
+<div><pre>fmap(fmap sq) mis</pre></div>
+This goes to two layers of containership.
+Could be written <pre>(fmap.fmap) sq mis</pre>
+
+<h2>Bifunctors</h2>
+
+Most type constructors in Haskell are functors. All the algebraic data structures are automatically functorial. Algebraic data structures are formed using products or sums, applied to unit or void or a type variable.
+
+<h3>Product of categories</h3>
+
+A product of two types is a pair <code>(a, b)</code>. Could be rewritten as a type constructor acting on <code>a</code> and <code>b</code> : <pre>(,) a b</pre>
+<br>If we fix <code>a</code>, is it a functor in <code>b</code> ?
+
+<img src="img/product-as-functor.jpg" alt="Product as functor">
+
+<div><pre>fmap f(e, x) = (e, fx)</pre></div>
+
+By the same way we can show that it's also functorial in the first argument.
+<br>
+<br>But is it functorial in both arguments at the same time, a functor that takes two types and produces a third type ?
+<br>
+<br>We can do this by defining a product of two categories. Then a functor from a product to a category would be equivalent to a functor with two arguments. We do the same with functions : a function with two arguments is a function that takes a pair as argument.
+<br>
+<br>The product of small categories is easy to define.
+<br>Objects in small categories form sets, we can define the product of two categories as a category containing the pairs ; a simple cartesian product of two sets.
+
+<img src="img/product-of-categories.jpg" alt="Product of categories">
+
+The product is noted <code style="font-size:1.4em; font-weight:bold;">C x D</code>
+
+<br>Hom-sets also form sets, so the morphisms can also be paired. The morphisms of <code>C x D</code> are formed by cartesian product of two hom-sets.
+<br>Composition of morphisms can be easily defined : <code>(f', g') o (f, g) = (f' o f, g' o g)</code>
+<br>Associativity is obvious.
+<br>The identity can be defined as <code>id <sub>(a, b)</sub> = (id <sub>a</sub>, id <sub>b</sub>)</code>
+<br><i><code>C x D</code> is therefore a category</i>.
+<br>
+<br>So it is possible to define a functor <code>C x D &rarr; E</code>.
+<br>It maps a pair of objects to an object and a paire of morphisms to a morphism.
+<br>Such a functor is called a <b>bifunctor</b>.
+<br>
+<br>In Haskell we are in the category of types, so it's a functor <code>C x C &rarr; C</code>
+<br>In terms of types and functions, this is a mapping from two types to a type, and from a pair of functions to a function.
+<br>We are lifting two functions at the same time.
+<div><pre>
+class Bifunctor f where
+    bimap :: (a &rarr; a') &rarr; (b &rarr; b') &rarr; (f a b &rarr; f a' b')
+</pre></div>
+The compiler sees that f is acting on two types and then knows that is has two types as arguments.
+<br>
+<br>In particular, we can define the product <pre>(,) a b</pre> as a bifunctor. Fixing the first or the second argument can be done by using an identity as one of the functions <code>(a &rarr; a')</code> or <code>(b &rarr; b')</code>.
+
+<h3>Sums of categories</h3>
+
+We can also use a bifunctor for the sum.
+<br>The canonical sum type of two types, <code>Either a b</code>, is a bifunctor. We can define the action of two functions on <code>Either a b</code>. It takes two types, a pair from a product, and produces a third type, <code>Either a b</code>. The first function will be applied to <code>a</code>, the second will be applied to <code>b</code>.
+
+<h3>Cartesian categories</h3>
+
+A category where the product is defined for any pair of objects is called a <b>cartesian category</b>.
+<br>In a cartesian category, this product is a bifunctor of <b><code>C x C &rarr; C</code></b>.
+<br>The same is true for coproduct.
+<br>
+<br>We are in a cartesian category, so the product is defined for any pair <code>(a, b)</code>.
+<br>Morphisms <code>f</code> and <code>g</code> such as <code>f a = a'</code> and <code>f b = b'</code>.
+<br>We can also construct a product for <code>a'</code> and <code>b'</code>.
+
+<img src="img/bifunctor-product.jpg" alt="Bifunctor product">
+
+To show that it's a bifunctor we must show that we can lift <code>f</code> and <code>g</code> to something that goes from <code>(a, b)</code> to <code>(a', b')</code>.
+<br>In Haskell it was easy, we just applied <code>f</code> to <code>a</code> and <code>g</code> to <code>b</code> and had this mapping.
+<br>In the general case, the definition of a product is the universal construction, which says that if we have a candidate for the product, there is a unique morphism from this candidate and the actual product.
+<br>Let's think at <code>(a, b)</code> as a candidate for the product of <code>a'</code> and <code>b'</code> ; there are two projections from <code>(a, b)</code> to <code>a'</code> and <code>b'</code> : <code>f o p</code> and <code>g o q</code>.
+<br>Here the real product of <code>a'</code> and <code>b'</code> is <code>(a', b')</code> and the fake candidate is <code>(a, b)</code>.
+<br>From the universal construction we know that there is a unique arrow from <code>(a, b)</code> to <code>(a', b')</code>.
+<br>This gives us our lifting, we call it <code style="font-size:1.4em; font-weight:bold;">f x g</code>.
+<br>
+<br>The same kind of analysis works also for the coproduct in the opposite category.
+<br>A category where the coproduct is a bifunctor is called a <b>cocartesian category</b>.
+<br>
+<br>Categories who have a bifunctor like this are called <b>monoidal categories</b> ; but to be monoidal, they also need to have a unit.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

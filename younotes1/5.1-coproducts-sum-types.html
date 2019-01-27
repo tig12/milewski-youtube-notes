@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>5.1: Coproducts, sum types | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="4.2-products.html">&larr;</a>
+    <a class="next" title="Next" href="5.2-algebraic-data-types.html">&rarr;</a>
+</nav>
+
+
+<h1>5.1: Coproducts, sum types</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=LkIRsNj9T-8">this youtube video</a></div>
+
+<h2>Coproduct</h2>
+
+The coproduct is the <b>dual</b> of the product. The dual is the same thing but in the opposite category.
+<br>So we build the product diagram reverting the arrows :
+
+<img src="img/product4.jpg" alt="Cartesian product 4">
+
+Instead of having projections <code>p</code> and <code>q</code>, we have <b>injections</b> <code>i</code> and <code>j</code>.
+<br>So this is the pattern : we fix two objects <code>a</code> and <code>b</code>. An object <code>c</code> will match this pattern if it has two arrows coming to it from <code>a</code> and <code>b</code>.
+<br>And to match which candidate is the best, we map the best match <code>c</code> to fake candidates <code>c'</code>.
+<br>The existence of a unique morphism such as the diagram commutes permits to determine the best match.
+<br>Commuting condition is expressed by 
+<div class="formula">
+i' = m o i
+<br>j' = m o j
+</div>
+
+<h3>In terms of functions</h3>
+
+What does coproduct mean in set theory ?
+<br>The fact that we have thes injection means that we are embedding the sets <code>a</code> and <code>b</code> into <code>c</code>.
+<br>Functions can shrink things, or not cover their whole codomain, they can be non injective or non surjective ; but we want <code>i</code> and <code>j</code> to be the best fit. We want to embed exactly <code>a</code> and <code>b</code> into <code>c</code>, no more and no less. This is just like the <b>union</b> of <code>a</code> and <code>b</code>.
+
+<img src="img/union.jpg" alt="Union">
+
+Every universal construction permits to build the best possible fit, it picks an ideal match.
+
+But what happens when they overlap ? Or when <code>a</code> = <code>b</code> ?
+<br>The union of a set with itself is the set itself. But there is an other possibility : the <b>discrimated union</b> ; we tag the elements in the discrimated union : this element comes from the left one, this element comes from the right one ; the set is duplicated.
+<br><code>c</code> is in fact a discrimated union because we can easily build a morphism <code>m</code> from discriminated union to union ; <code>m</code> is unique and non-injective.
+
+<img src="img/discriminated-union1.jpg" alt="Discriminated Union">
+
+And we could not go the other way round.
+
+<img src="img/discriminated-union2.jpg" alt="Discriminated Union 2">
+
+Each element <code>x</code> should be mapped twice, a function can't do that.
+
+<h3>In terms of types</h3>
+
+Called a <b>tagged union</b> or <b>variant</b>.
+<br>In many programming languages you have a union ; if you take the union of Integer and boolean, you will have either an integer or a boolean, not both.
+<br>The simplest example is an enumeration, which is a union of things.
+<br>
+<br>So the canonical way to build a product is a pair, built into the language.
+<br>A union, also called a <b>sum type</b>, is not usually built into the language but is easy to define.
+<br>The canonical definition of a sum type of two types is called <code>Either</code>, taking in parameters two types <code>a</code> and <code>b</code>.
+<br>In Haskell, <code>data Either = Left a | Right b</code> (Left a or Right b) ; <code>Left</code> and <code>Right</code> corresponds to injections <code>p</code> and <code>q</code>.
+<br>In C++ we would define a class with two constructors.
+<br>
+<br>This is a dual picture ; in product we have the functions <code>fst</code> and <code>snd</code> which can destroy the pair, extract and see what's inside a pair.
+In coproduct we have functions which construct an <code>Either</code>. But can we extract stuff from an <code>Either</code> ?
+<br>If we have an <code>x :: Either Int Bool</code>, to extract an Int, we need to write code that takes into account both possibilities, that will match either Right or Left ; this is called <b>pattern matching</b> ; Left and right are patterns.
+
+<h2>The type system</h2>
+
+Now that we have product type, sum type, unit type, void, we have pretty much of the foundations of the type system.
+<br>
+<br>Product types are the most visible ones, they may be built-in in Haskell or defined with generics in C++.
+<br>All these constructs in Haskell are equivalent to a product : they store two floats, no more and no less.
+
+<div><pre>
+data Point = (Float, FLoat)
+data Point = P Float Float
+data Point{
+    x :: Float,
+    y :: Float
+}
+</pre></div>
+
+<br>Why are these called products and sums ?
+<br>A product comes from cartesian product, so it's undersandable.
+<br>Coproduct is a union, which is a kind of sum of two sets.
+<br>This will be precised in the next course.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

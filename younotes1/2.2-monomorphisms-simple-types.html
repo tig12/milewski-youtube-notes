@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>2.2: Monomorphisms, simple types | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="2.1-functions-epimorphisms.html">&larr;</a>
+    <a class="next" title="Next" href="3.1-examples-orders-monoids.html">&rarr;</a>
+</nav>
+
+
+<h1>2.2: Monomorphisms, simple types</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=NcT7CGPICzo">this youtube video</a></div>
+
+<!-- ********************************************************************************* -->
+<h2>Monorphisms</h2>
+
+A non-injective function will map two elements <code>x<sub>1</sub></code> and <code>x<sub>2</sub></code> of set <code>a</code> to the same element <code>y</code> of set <code>b</code>.
+
+<img class="margin" src="img/monomorphism.jpg" alt="Monomorphism">
+
+<br>If we consider functions <code>g<sub>1</sub></code> and <code>g<sub>2</sub></code> from <code>c</code> to <code>a</code>, equal except in <code>z</code> : <code>g<sub>1</sub>(z) = x<sub>1</sub></code> and <code>g<sub>2</sub>(z) = x<sub>2</sub></code>.
+<br>Here we have <code>g<sub>1</sub></code> different from <code>g<sub>2</sub></code> but <code>f o g<sub>1</sub> = f o g<sub>2</sub></code>
+
+<br>
+<br>Taking the converse permits to define a monomorphism :
+<br>
+<div class="formula inline-block margin">
+<code>f</code> is a monomorphism if for all object <code>c</code>, for all morphism <code>g<sub>1</sub></code> and <code>g<sub>2</sub> :: c &rarr; a</code>
+<br>f o g<sub>1</sub> = f o g<sub>2</sub> implies that g<sub>1</sub> = g<sub>2</sub>.
+</div>
+
+<br>Again, we define a property of one morphism using the whole universe.
+<br>
+<br>In set theory a function that is both injective and surjective is a bijection ; so we can ask if in category theroy a morphism which is both an automorphism and an epimorphism is encessarily an isomorphism. The answer is no, there are counter-examples.
+
+<!-- ********************************************************************************* -->
+<h2>Single types</h2>
+
+Here we define some simple types in terms of elements, and we'll see later how this can be expressed in category theory.
+
+<!-- ************************************* -->
+<h3>Zero elements - Empty set</h3>
+
+Does not correspond to a type in imperative languages.
+<br>In Haskell, types are funny because they contain this bottom element. So an empty set is not really empty because it contains this bottom element. But if we forget for a moment about functions that never terminate, then we can say that the empty set corresponds to the type <b>Void</b>. It has no constructor.
+<br>Can we find function that takes an argument of type Void ?
+<br>If we define a function in terms of elements, mathematically speaking, the answer is yes. We could call this function a bluff. If I declare "I have a function that takes a Void and return an integer, I challenge you to call it. Prove me wrong.", you can't because there is no way to produce an element of type Void. The ability to construct a function taking a Void as argument (even if we can't call it) is important because it permits to define Void identity.
+<br>
+<div class="formula inline-block">Id<sub>Void</sub> :: Void &rarr; Void</div>
+<br>
+It exists "in vacuum" : you cannot provide an argument for it, you cannot actually test what it does. But it exists.
+<br>In Haskell, it is called an <i>absurd</i> function.
+<br>This name makes sense if you start translating programming or type theory into logic.
+<br>In logic, Void corresponds to false. We can't construct falsity from something (we can't prove that something is false, if something is false, it's false, it has no proof). In this correspondance between types and logic (propositions as types), the existence of a function corresponds to a proof of a proposition.
+<br>Since we can't create a Void, there is no proof af falsity.
+<br>But if we assume false, then from false follows anything.
+<br>
+<div class="formula inline-block">absurd :: Void &rarr; a</div> (a is any type).
+
+
+<!-- ************************************* -->
+<h3>One element - Singleton</h3>
+
+In Haskell, this type is called unit and noted <code>()</code>. It has only one element, and it can be constructed from nothing.
+<br>The notation for the element of the singleton type is also noted <code>()</code> ; we have the type definition <code>() :: ()</code>.
+<br>In the point of view of logic, it correponds to <code>true</code>. We can always prove that it's true (it's a tautology).
+<br>We can write a function <code>unit</code> that returns a unit from any type : <code>unit :: a &rarr; ()</code>. As unit can be created from thin air, we just disregard the argument, create and return a unit.
+<br>
+<br>The function <code>() &rarr; Int</code> is the creation of a constant (a pure function always returns the same value) ; there are many functions like this, for any type.
+<br>For boolean, there are two functions like this : <code>() &rarr; true</code> and <code>() &rarr; false</code>.
+<br>We have as many functions as there are elements in the set.
+<br>We have a way to define the value of an element of a set without talking about elements.
+<br>A family of functions from unit corresponds to picking elements of a set.
+<br>In category theory we'll generalize the notion of singleton set. These functions permit to associate a singleton to any object, they are called <i>generalized elements</i>. It's a kind of backdoor way to talk about elements in category. But the singleton does not exist in all categories.
+
+<h3>Two elements - Booleans</h3>
+
+A two element set is equivalent to type <code>Bool</code>. We'll see later that bool is not an atomic construction in Set category, it can be defined as a sum of two units.
+<br>But the two types <code>Void</code> and <code>Unit</code> form the basis for the rest, we can build on top of them to build more complex types.
+<br>A function that returns a boolean is called a <b>predicate</b>, for example <code>isDigit()</code>.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>

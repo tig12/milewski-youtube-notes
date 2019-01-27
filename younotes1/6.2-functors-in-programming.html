@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>6.2: Functors in programming | Categories Bartosz Milewski Youtube notes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<nav class="prevnext">
+    <a class="top" title="Index" href="../index.html">&uarr;</a>
+    <a class="prev" title="Previous" href="6.1-functors.html">&larr;</a>
+    <a class="next" title="Next" href="7.1-functoriality-bifunctors.html">&rarr;</a>
+</nav>
+
+                                                                                                                                
+<h1>6.2: Functors in programming</h1>
+
+<div>Notes from <a href="https://www.youtube.com/watch?v=FyoQjkwsy7o">this youtube video</a></div>
+
+<h2>The <code>Maybe</code> functor, continued</h2>
+
+We have defined the mappings of the <code>Maybe</code> functor (see previous video) but we still need to see if it respects the additional conditions, sometmes calles <b>functor laws</b> : it must preserves identity and composition.
+<br>In Haskell, the compiler cannot check, the type system cannot encode these conditions. However, unlike in other languages, there is a way of using Haskell on a black or white board to formally prove things about the language.
+<br>In Haskell, every definition af a function is an equality : "this function acting on this argument equals this expression". It's an equation that permits to replace the left side by the right side whenever we find it in a program, which is called <i>inilining</i>. Inlining is not always correct if it has side effects, like in C or C++ macros. But in Haskell, functions are pure and inlining can be done safely. And we can do the opposite of inilining : <i>refactoring</i>, replacing an expression by a function call. In Haskell, this is guaranteed to work.
+<br>This can be used to do <b>equational reasoning</b>. If we can show, using inlining and refactoring, that we can go from a result to an other, then these two things are equivalent.
+
+<h3>Identity</h3>
+
+We need to prove that <pre>fmap id<sub>a</sub> = id<sub>Maybe a</sub></pre>
+<br>But it's a polymorphic id, it's defined for every type by the same formula (parametric polymorphism), so we can write : <pre>fmap id = id</pre>
+<br><code>fmap</code> and <code>id</code> are already defined, so we just say "these two functions are equal", which means that they have equal values on equal arguments.
+<br>Equational reasoning : when <code>fmap</code> acts on <code>id</code>, it produces a function from <code>Maybe a</code> to <code>Maybe a</code>. So two cases to check : this maybe could be a <code>Nothing</code> or a <code>Just</code>.
+<ol>
+    <li>
+        <code>fmap id</code> acting on <code>Nothing</code>. By definition of <code>fmap</code>, <code>fmap Nothing = Nothing</code>.
+        <br>And the definition if <code>id</code> is : <code>id x = x</code>.
+        <br>So <code>Nothing = id Nothing</code> (this is refactoring).
+        <br>So <code>fmap id Nothing = Id Nothing</code>
+    </li>
+    <li>
+        <code>fmap id</code> acting on <code>Just x</code>. By definition of <code>fmap</code>, <code>fmap id(Just x) = Just (f x)</code>
+        <br>So <code>fmap id(Just x) = Just(Id x) = Just x</code>
+        <br>And by definition of <code>id</code>, <code>id(Just x) = Just x</code>
+        <br>So <code>fmap id(Just x) = Just x</code>
+    </li>
+</ol>
+
+<h3>Composition</h3>
+
+We need to prove that
+<div><pre>fmap(g . f) = fmap g . fmap f</pre></div>
+Corresponds to this diagram :
+<div><img src="img/fmap-composition.jpg" alt="fmap composition" /><br>(TODO : add <code>fmap g . fmap f</code>)</div>
+This can be showed by equational reasoning using the same method as we did for identity (It's done on the <a href="https://bartoszmilewski.com/2015/01/20/functors/">blog page about functors</a>).
+<br>Strictly speaking there is no need to prove it because as we use parametric polymorphism, this is a theorem for free. Once the id property is proven, this follows.
+
+<h2>Functors in Haskell</h2>
+
+Let's see how to define a functor in general in Haskell. It's called <b>lifting</b> (the functions obtained by a functor are "above" the original ones in the figure.
+
+<img src="img/lifting.jpg" alt="Lifting in Haskell">
+
+<code>fmap</code> is a higer-order polymorphic function ; higer-order because it takes a function and produces a function ; polymorphic because <code>a</code> and <code>b</code> are arbitrary types. A different <code>fmap</code> is defined for every functor, with different implementations. We have an example of ad'hoc polymorphism ; depending on the parameter (the functor in this case), the implementation of the function (<code>fmap</code> in this case).
+<br>We use <b>type class</b> : a family (class) of types that share a common interface. In Haskell, for example a class that supports equality :
+<div><pre>class Eq a where
+    (==) :: a &rarr; a &rarr; a Bool; </pre></div>
+Some type <code>a</code> is a member of <code>Eq</code> class. operator <code>==</code> takes two <code>a</code> and produces a <code>Bool</code>, meaning : "is the first <code>a</code> equal to the second one ?" (yes or no). One name for the function (<code>==</code>) will serve for many different types. The implementation will be different for every type.
+<br>But functors are not parametrized by type, functors are type constructors. In Haskell, the class mechanism works equally well for type, type constructors and more exotic things.
+<br>The to define a fnuctor in Haskell, we write
+<div id=""><pre>class Functor f where
+    fmap :: (a, b) &rarr; (f a &rarr; f b)</pre></div>
+The compiler knows it's a type constructor because f acts on a type to produce an other type, so f is a type constructor.
+<br>Because of currying (we'll see later), parentheses can be skipped and write
+<div id=""><pre>class Functor f where
+    fmap :: (a, b) &rarr; f a &rarr; f b</pre></div>
+
+<h2>The <code>List</code> functor</h2>
+
+<div><pre>data List a = Nil | Cons a List(a)</pre></div>
+
+A list of <code>a</code> is either empty or consists of a head of type <code>a</code> and a tail.
+<br>List is a type constructor ; it takes an arbitrary type and creates a list of this type.
+<br>Is is a functor ? Obviously yes because it's built algebraic data types. But we don't know that yet, so let's define its function <code>fmap</code>.
+<div><pre>instance List Functor where
+    fmap _ Nil = Nil
+    fmap f(Cons h t) = Cons((f h) (fmap f t))</pre></div>
+<code>List</code> is an instance of class <code>Functor</code> ; providing the implementation of <code>fmap</code> proves that it's a functor.
+<br><code>fmap</code> takes a function from <code>a</code> to <code>b</code> and produces a function from <code>List a</code> to <code>List b</code>.
+<br><code>fmap _ Nil = Nil</code> : an empty list produces an empty list (the underscore replaces <code>f</code> when <code>f</code> is not used in the right part of the equality).
+<br><code>fmap f(Cons h t)</code> : <code>h</code> (head) is of type <code>a</code> ; <code>t</code> (tail) is of type <code>List a</code>. The recursive call to <code>fmap</code> will act on the tail.
+
+<h2>The <code>Reader</code> functor</h2>
+
+<div><pre>type Reader ra = r &rarr; a</pre></div>
+The type constructs the arrow itself.
+<br>It could be expressed as
+<div><pre>type Reader ra = (&rarr;) r a</pre></div>
+<br>It is like a type constructor but it takes two types as arguments, <code>r</code> and <code>a</code> and produces a type of function from <code>r</code> to <code>a</code>.
+<br>So far we've seen constructors that take one type as argument, but here it takes two types. But we can always fix one type and only care about the second one.
+<br>So we fix <code>r</code>, fix the arrow and vary only <code>a</code>.
+<br>The <code>Reader r</code> functor a mapping between type <code>a</code> and a function from <code>r</code> to <code>a</code>.
+<br>This is called <b>currying</b> or <b>partial application</b> : you have a function of two arguments, you fix one argument and it becomes a function of one argument.
+<br>The fmap function of <code>Reader</code> :
+<div><pre>fmap :: (a &rarr; b) &rarr; (r &rarr; a) &rarr; (r &rarr; b )</pre></div>
+<div><pre>fmap f g = f o g = (.) f g</pre> or <pre>fmap = (.)</pre></div>
+
+<h2>Intuition behind functors</h2>
+(For endofunctors)
+<br>There are also the <code>Const</code>, or <code>Identity</code> functors. They all seem totally different.
+<br>The intuition is that when a functor is acting on some type, it encapsulates the values of this type, somehow hides them.
+<br>An element of the type "functor of <code>a</code> sort of has elements of type <code>a</code> in it.
+<br>So we can think of a functor as a <b>container</b>.
+<br>This is obvious for some functors, like <code>List</code>, <code>Tree</code>, <code>Vector</code>.
+<br>Some functors seem more problematic, like <code>Maybe</code>, which contains either nothing (empty container) or an <code>a</code>.
+<br>
+<br>Applying a function to a container means opening it and applying the function to the contents.
+<br>
+<br>Can we see <code>Reader</code> as a container ? For example if <code>a</code> is a boolean, a function taking a bool as argument can return two values ; in this sense it "contains" a boolean, this is even more understandable if we memoize the function
+<br>
+<br>The distinction of a data type and a function is weak.
+<br>For axample in Haskell, a list from 1 to infinity <code>[1 ..]</code> ; this is data but this can't be stored into memory an internally it is implemented as a function which produces the elements on demand.
+<br>A function is a data, a data is a function. We'll see that a function type is in category theory is actually an exponential, which is a data type.
+<br>
+<br>In C++ there is something called <code>future</code> which contains a value to be evaluated by an other thread ; it may contain or not a value, depending if it's already evaluated. And you can apply a function to this value wether it is evaluated yet or not.
+<br>
+<br>The only important thing about a functor is that you can apply a function to what it contains. A functor doesn't give you a way of retrieving this value, it's not aprt of its definition.
+
+<!-- ********************************************************************************* -->
+<!-- ************************************* -->
+</body>
+</html>
