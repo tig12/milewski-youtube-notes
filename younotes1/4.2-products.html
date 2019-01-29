@@ -17,10 +17,15 @@
 </nav>
 
 
+<header>
 <h1>4.2: Products</h1>
-
 <div>Notes from <a href="https://www.youtube.com/watch?v=Bsdl_NKbNnU">this youtube video</a></div>
+</header>
 
+<article>
+
+
+<!-- ********************************************************************************* -->
 <h2>Complement on terminal objects</h2>
 
 We said that there is a unique incoming arrow from every object to a terminal object, but said nothing about outgoing arrows. There are usually outgoing arrows, and these arrows help us to defined the <b>generalized elements</b> in other objects.
@@ -29,6 +34,7 @@ We said that there is a unique incoming arrow from every object to a terminal ob
 <br>So we can generalize this to other categories saying that if I have a terminal object in a category and morphisms from terminal to other objects, it's like picking an element in the other object, without knowing what an element is.
 <br>It's important because there are many categories similar to the category of sets, and if they have a terminal object, it provides a way of picking elements.
 
+<!-- ********************************************************************************* -->
 <h2>Opposite category</h2>
 
 When we saw universal constructions of terminal and initial objects, we studied in detail terminal objects, and skipped initial objects saysing that it's the same if we invert the arrows.
@@ -38,7 +44,7 @@ When we saw universal constructions of terminal and initial objects, we studied 
 <br>The inverse of a function <code>f</code> is noted <span class="formula">f<sup>op</span>
 <br>from every arrow <code>f</code> going from <code>a</code> to <code>b</code> there is an arrow <code>f<sup>op</sup></code> going from <code>b</code> to <code>a</code>.
 
-<img src="img/opposite-category.jpg" alt="Opposite category">
+<img class="margin border" src="img/opposite-category.jpg" alt="Opposite category">
 
 But how do we know that C<sup>op</sup> is a category ?
 <ul>
@@ -57,25 +63,26 @@ But how do we know that C<sup>op</sup> is a category ?
 
 So instead of defining the initial object in category <code>C</code> we could say that the initial object is the terminal object in the opposite category.
 
+<!-- ********************************************************************************* -->
 <h2>Product</h2>
 In the ancient world of set, there is something called the <b>cartesian product</b>.
 
-<img src="img/product1.jpg" alt="Cartesian product 1">
+<img class="margin border" src="img/product1.jpg" alt="Cartesian product 1">
 The cartesian product of two sets <code>a</code> and <code>b</code> is the set of pairs composed by an element of <code>a</code> and an element of <code>b</code>.
 <br>For example a plane is the cartesian product of x and y axis.
 
-<img src="img/product2.jpg" alt="Cartesian product 2">
+<img class="margin border" src="img/product2.jpg" alt="Cartesian product 2">
 
 To express cartesian product in terms of categories, what are the properties ?
 <br>For every cartesian product of two sets, there are these two special functions called <b>projections</b>.
 <br>In Haskell, they are called first (<code>fst</code>) an second (<code>snd</code>).
 
-<img src="img/product3.jpg" alt="Cartesian product 3">
+<img class="margin border" src="img/product3.jpg" alt="Cartesian product 3">
 
 So here we have a pattern : <code>a</code> and <code>b</code> are fixed ; the pattern is : pick an object <code>c</code> which has two arrows, one going to <code>a</code> and one going to <code>b</code>. <code>c</code> might be a cartesian product, but we don't know. There may be many other such <code>c</code>. One of them is the cartesian product, which one is the correct one ?
 <br>Universal construction to the rescue, we need to be able to rank them.
 
-<img src="img/product4.jpg" alt="Cartesian product 4">
+<img class="margin border" src="img/product4.jpg" alt="Cartesian product 4">
 
 We say that <code>c</code> is better than <code>c'</code> if there is a unique morphism <code>m</code> from <code>c'</code> to <code>c</code> such as
 <br><span class="formula">p o m = p'</span> and <span class="formula">q o m = q'</span>
@@ -110,12 +117,11 @@ We say that <code>c</code> is better than <code>c'</code> if there is a unique m
 <br>Each candidate has a flaw, and we can distill these flaws in <code>m</code>.
 <br>
 <br>The definition of product is :
-<br>
-<div style="display:inline-block; border:1px solid black; margin:1em 0 1em 2em;">
-    <div style="float:left; padding:1em 0 1em 0;">
-        <img src="img/product4.jpg" alt="Cartesian product 4" />
-    </div>
-    <div style="float:left; padding:1em;">
+
+<div class="flex-wrap">
+    <img class="margin border" src="img/product4.jpg" alt="Cartesian product 4" />
+    
+    <div class="inline-block border margin padding">
         A categorical product of two objects <code>a</code> and <code>b</code> is a third object <code>c</code> with two projections
         <br><code>p :: c &rarr; a</code>
         <br><code>q :: c &rarr; b</code>
@@ -127,10 +133,9 @@ We say that <code>c</code> is better than <code>c'</code> if there is a unique m
         <br><code>p' = p o m</code>
         <br><code>q' = q o m</code>
     </div>
-</div>
+</div><!-- end class="flex-wrap" -->
 
-
-<br>Saying that <code>p' = p o m</code> and <code>q' = q o m</code> is equivalent to say that the diagram <b>commutes</b>.
+Saying that <code>p' = p o m</code> and <code>q' = q o m</code> is equivalent to say that the diagram <b>commutes</b>.
 <br>We say that a diagram commutes if two paths give the same results.
 <br>
 <br>Not every category has product, and if it has, maybe it doesn't have it for any pair of objects.
@@ -139,5 +144,6 @@ We say that <code>c</code> is better than <code>c'</code> if there is a unique m
 
 <!-- ********************************************************************************* -->
 <!-- ************************************* -->
+</article>
 </body>
 </html>

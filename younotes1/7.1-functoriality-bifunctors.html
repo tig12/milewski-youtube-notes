@@ -17,13 +17,18 @@
 </nav>
 
 
+<header>
 <h1>7.1: Functoriality, bifunctors</h1>
-
 <div>Notes from <a href="https://www.youtube.com/watch?v=EO86S2EZssc">this youtube video</a></div>
+</header>
 
+<article>
+
+
+<!-- ********************************************************************************* -->
 <h2>The category <code>Cat</code></h2>
 
-<img src="img/functor-composition.jpg" alt="Functor composition">
+<img class="border margin" src="img/functor-composition.jpg" alt="Functor composition">
 
 Functor composition is easy to define. As functors are defined in terms of functions (in small categories), it just follows the rules of function composition.
 <br>As each functor preserves structure, the composition also preserves structure.
@@ -31,25 +36,31 @@ Functor composition is easy to define. As functors are defined in terms of funct
 <br>
 <br>The identity functor maps everything to itself. It is necessarily an endofunctor.
 
-<img src="img/identity-functor.jpg" alt="Identity functor">
+<img class="border margin" src="img/identity-functor.jpg" alt="Identity functor">
 
 It is an identity with respect to composition of functors.
 <br>
 <br>Whatever we know about function composition applies to functor composition : associativity, identity...
 <br>So <i>it is a category</i> in which functors are morphisms and categories are objects.
-<br>Such a category is called <code style="font-size:1.4em; font-weight:bold;">Cat</code>.
+<br>Such a category is called <code class="big3 bold">Cat</code>.
 <br>We won't see what happens when a category is large for the moment.
 
+<!-- ************************************* -->
 <h3>Example : combining <code>Maybe</code> and <code>List</code></h3>
 
-This is useful, for example for function <pre>tail :: [a] &rarr; [a]</pre> which throws away the first element of a list.
+This is useful, for example for function 
+<pre>tail :: [a] &rarr; [a]</pre>
+which throws away the first element of a list.
 <br>It is not defined for empty list.
-<br>Let's define <pre>SafeTail :: [a] &rarr; Maybe [a]</pre>
-<br>It returns a list <code>[a]</code> or <code>Nothing</code> if the list is empty (<code>Nothing</code> is like an exception code).
-<div><pre>
+<br>Let's define
+<pre>SafeTail :: [a] &rarr; Maybe [a]</pre>
+It returns a list <code>[a]</code> or <code>Nothing</code> if the list is empty (<code>Nothing</code> is like an exception code).
+
+<pre>
 SafeTail [] = Nothing
 SafeTail (x:xs) = Just xs
-</pre></div>
+</pre>
+
 <code>x</code> is the head of the list, of type <code>a</code>.
 <br><code>xs</code> is the tail of the list, of type <code>[a]</code>.
 <br>
@@ -57,27 +68,33 @@ SafeTail (x:xs) = Just xs
 <br>So <code>Maybe List</code>, a composition of two functors, is also a functor.
 <br>
 <br>How to apply the function square to the contents of this <code>Maybe List</code> ? We could implement dealing with all the particular cases (<code>Nothing</code>), but we have already defined the functions <code>fmap</code>.
-<div><pre>
+
+<pre>
 mis :: Maybe[Int]
 sq :: Int &rarr; Int
-</pre></div>
-<code>fmap</code> goes under the functor and applies. Here under <code>Maybe</code> is a <code>List</code>, so to apply <code>sq</code> we must use <code>fmap</code> to this list.
-<div><pre>fmap(fmap sq) mis</pre></div>
-This goes to two layers of containership.
-Could be written <pre>(fmap.fmap) sq mis</pre>
+</pre>
 
+<code>fmap</code> goes under the functor and applies. Here under <code>Maybe</code> is a <code>List</code>, so to apply <code>sq</code> we must use <code>fmap</code> to this list.
+<pre>fmap(fmap sq) mis</pre>
+This goes to two layers of containership.
+<br>Could be written
+<pre>(fmap.fmap) sq mis</pre>
+
+<!-- ********************************************************************************* -->
 <h2>Bifunctors</h2>
 
 Most type constructors in Haskell are functors. All the algebraic data structures are automatically functorial. Algebraic data structures are formed using products or sums, applied to unit or void or a type variable.
 
+<!-- ************************************* -->
 <h3>Product of categories</h3>
 
-A product of two types is a pair <code>(a, b)</code>. Could be rewritten as a type constructor acting on <code>a</code> and <code>b</code> : <pre>(,) a b</pre>
-<br>If we fix <code>a</code>, is it a functor in <code>b</code> ?
+A product of two types is a pair <code>(a, b)</code>. Could be rewritten as a type constructor acting on <code>a</code> and <code>b</code> : 
+<pre>(,) a b</pre>
+If we fix <code>a</code>, is it a functor in <code>b</code> ?
 
-<img src="img/product-as-functor.jpg" alt="Product as functor">
+<img class="border margin" src="img/product-as-functor.jpg" alt="Product as functor">
 
-<div><pre>fmap f(e, x) = (e, fx)</pre></div>
+<pre>fmap f(e, x) = (e, fx)</pre>
 
 By the same way we can show that it's also functorial in the first argument.
 <br>
@@ -88,9 +105,9 @@ By the same way we can show that it's also functorial in the first argument.
 <br>The product of small categories is easy to define.
 <br>Objects in small categories form sets, we can define the product of two categories as a category containing the pairs ; a simple cartesian product of two sets.
 
-<img src="img/product-of-categories.jpg" alt="Product of categories">
+<img class="border margin" src="img/product-of-categories.jpg" alt="Product of categories">
 
-The product is noted <code style="font-size:1.4em; font-weight:bold;">C x D</code>
+The product is noted <code class="big3 bold">C x D</code>
 
 <br>Hom-sets also form sets, so the morphisms can also be paired. The morphisms of <code>C x D</code> are formed by cartesian product of two hom-sets.
 <br>Composition of morphisms can be easily defined : <code>(f', g') o (f, g) = (f' o f, g' o g)</code>
@@ -105,19 +122,21 @@ The product is noted <code style="font-size:1.4em; font-weight:bold;">C x D</cod
 <br>In Haskell we are in the category of types, so it's a functor <code>C x C &rarr; C</code>
 <br>In terms of types and functions, this is a mapping from two types to a type, and from a pair of functions to a function.
 <br>We are lifting two functions at the same time.
-<div><pre>
+<pre>
 class Bifunctor f where
     bimap :: (a &rarr; a') &rarr; (b &rarr; b') &rarr; (f a b &rarr; f a' b')
-</pre></div>
+</pre>
 The compiler sees that f is acting on two types and then knows that is has two types as arguments.
 <br>
 <br>In particular, we can define the product <pre>(,) a b</pre> as a bifunctor. Fixing the first or the second argument can be done by using an identity as one of the functions <code>(a &rarr; a')</code> or <code>(b &rarr; b')</code>.
 
+<!-- ************************************* -->
 <h3>Sums of categories</h3>
 
 We can also use a bifunctor for the sum.
 <br>The canonical sum type of two types, <code>Either a b</code>, is a bifunctor. We can define the action of two functions on <code>Either a b</code>. It takes two types, a pair from a product, and produces a third type, <code>Either a b</code>. The first function will be applied to <code>a</code>, the second will be applied to <code>b</code>.
 
+<!-- ************************************* -->
 <h3>Cartesian categories</h3>
 
 A category where the product is defined for any pair of objects is called a <b>cartesian category</b>.
@@ -128,7 +147,7 @@ A category where the product is defined for any pair of objects is called a <b>c
 <br>Morphisms <code>f</code> and <code>g</code> such as <code>f a = a'</code> and <code>f b = b'</code>.
 <br>We can also construct a product for <code>a'</code> and <code>b'</code>.
 
-<img src="img/bifunctor-product.jpg" alt="Bifunctor product">
+<img class="border margin" src="img/bifunctor-product.jpg" alt="Bifunctor product">
 
 To show that it's a bifunctor we must show that we can lift <code>f</code> and <code>g</code> to something that goes from <code>(a, b)</code> to <code>(a', b')</code>.
 <br>In Haskell it was easy, we just applied <code>f</code> to <code>a</code> and <code>g</code> to <code>b</code> and had this mapping.
@@ -136,7 +155,7 @@ To show that it's a bifunctor we must show that we can lift <code>f</code> and <
 <br>Let's think at <code>(a, b)</code> as a candidate for the product of <code>a'</code> and <code>b'</code> ; there are two projections from <code>(a, b)</code> to <code>a'</code> and <code>b'</code> : <code>f o p</code> and <code>g o q</code>.
 <br>Here the real product of <code>a'</code> and <code>b'</code> is <code>(a', b')</code> and the fake candidate is <code>(a, b)</code>.
 <br>From the universal construction we know that there is a unique arrow from <code>(a, b)</code> to <code>(a', b')</code>.
-<br>This gives us our lifting, we call it <code style="font-size:1.4em; font-weight:bold;">f x g</code>.
+<br>This gives us our lifting, we call it <code class="big3 bold">f x g</code>.
 <br>
 <br>The same kind of analysis works also for the coproduct in the opposite category.
 <br>A category where the coproduct is a bifunctor is called a <b>cocartesian category</b>.
@@ -145,5 +164,6 @@ To show that it's a bifunctor we must show that we can lift <code>f</code> and <
 
 <!-- ********************************************************************************* -->
 <!-- ************************************* -->
+</article>
 </body>
 </html>

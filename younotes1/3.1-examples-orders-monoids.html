@@ -17,10 +17,15 @@
 </nav>
 
 
+<header>
 <h1>3.1: Examples of categories, orders, monoids</h1>
-
 <div>Notes from <a href="https://www.youtube.com/watch?v=aZjhqkD6k6w">this youtube video</a></div>
+</header>
 
+<article>
+
+
+<!-- ********************************************************************************* -->
 <h2>Empty category</h2>
 A category with no object and no arrow. The axioms af a category are satisfied :
 <ul>
@@ -30,15 +35,17 @@ A category with no object and no arrow. The axioms af a category are satisfied :
 This category is noted <span class="formula">&empty;</span>.
 <br>By itself this category is useless. The value of this category is in context. In the category of all categories, or in the category of small categories, this is important (it's a terminal object).
 
+<!-- ********************************************************************************* -->
 <h2>One object category</h2>
 It has at least one arrow, the identity. Also useless by itself, but useful in the context of all categories (it's also a terminal object).
 
+<!-- ********************************************************************************* -->
 <h2>Free construction from a graph</h2>
 If we have a graph and want to build a category from it, we can do it by adding arrows.
 
-<img src="img/graph2category.jpg" alt="Free construction of a category from a graph">
+<img class="margin border" src="img/graph2category.jpg" alt="Free construction of a category from a graph">
 
-<br>- Add identity arrows for all nodes of the graph.
+- Add identity arrows for all nodes of the graph.
 <br>- Add arrows that permit composability.
 <br>And we must check that associativity is satisfied.
 <br>
@@ -50,6 +57,7 @@ If we have a graph and want to build a category from it, we can do it by adding 
 <br>
 <br>We'll see applications of free construction for our programming tasks.
 
+<!-- ********************************************************************************* -->
 <h2>Orders</h2>
 Orders are categories in which arrows are not functions ; in zero and one object categories, arrows were not functions, but they are abstract arrows which do not have intuitive meaning.
 <br>In orders, arrows represent a relation. In particular an interesting relation is less or equal (<span class="formula">&le;</span>).
@@ -58,11 +66,12 @@ Orders are categories in which arrows are not functions ; in zero and one object
 <br>There are certain conditions an order has to fullfill in order to be an order.
 <br>And there are different types of orders : <b>preorders</b>, <b>partial orders</b>, <b>total orders</b>. We are mostly familiar with total order, because when we are sorting, we require that the elements satisfy a total order.
 
+<!-- ************************************* -->
 <h3>Preorders</h3>
 
 We only require composition : if <code>a &le; b</code> and <code>b &le; c</code>, then we want <code>a &le; c</code>
 
-<img src="img/preorder.jpg" alt="Preorder">
+<img class="margin border" src="img/preorder.jpg" alt="Preorder">
 
 In a preorder, there is either one arrow or no arrow between two objects. There cannot be multiple arrows between two objects.
 <br>Between two osbjects means starting from one object and ending to an other object. In principle we can have an arrow going backwards too.
@@ -82,19 +91,22 @@ In a preorder, there is either one arrow or no arrow between two objects. There 
 <br>
 <br>A thin category is a category in which every hom-set has either zero or one element.
 
+<!-- ************************************* -->
 <h3>Partial orders</h3>
 
 We impose additional conditions on preorder to get a partial order.
 <br>Partial order is something that has no loops : if you have an arrow from a to b, you cannot have an arrrow from b to a.
 <br>If wee look at it as a graph, it corresponds to a <b>Directed Acyclic Graph (DAG)</b>.
 
+<!-- ************************************* -->
 <h3>Total Orders</h3>
 
 The additional condition is that there is one arrow between <i>every</i> object of the category.
 
+<!-- ********************************************************************************* -->
 <h2>Epic and monic but not isomorphic</h2>
 
-<img src="img/epi-mono-thin-category.jpg" alt="Epimorphism and monomorphism in a thin category">
+<img class="margin border" src="img/epi-mono-thin-category.jpg" alt="Epimorphism and monomorphism in a thin category">
 
 Going back to the definition of epiomrphism and monomorphism in terms of equality of arrows that go from or to beginning or end of morphism, we see that this is automatically satisfied in a thin category as there is only one arrow between two objects.
 <br>So every arrow in a preorder is an epimorphism and a monomorphism at the same time. But it is not necessarily invertible. In a partial order, this is never invertible because there is no loops.
@@ -102,16 +114,18 @@ Going back to the definition of epiomrphism and monomorphism in terms of equalit
 <br>This is a counter example : an arrow can be both an epimorphism and a monomorphism without being invertible.
 <br>This is different from functions defined with sets, were a injective and surjective function is a bijection (then invertible).
 
+<!-- ********************************************************************************* -->
 <h2>Thick categories</h2>
 Categories where hom-sets have multiple arrows.
 In a thin catgory, there may be one or zero arrow ; there is or there is no relation ; a black and white world.
 <br>In a thick category, there may be multiple arrows between objects. If there are no arrows, the objects are not in relation. If there are multiple arrows, they can be seen as different proofs of the relation ; a category can be seen as a proof-relevant order.
 <br>This kind of proof-relevant stuff is becoming more and more important in homotopy type theory, which is built on the asumption that it's not only enough to show that something is related to something else, tehre are different ways to show they are related, and they are not equivalent.
 
+<!-- ********************************************************************************* -->
 <h2><a name="monoids">Monoids</a></h2>
 A one-object category can have many loops. One of them is the identity
 
-<img src="img/one-object-category.jpg" alt="One object category">
+<img class="margin border" src="img/one-object-category.jpg" alt="One object category">
 All the arrows are composable because the beginnings and ends of all arrows are the unique object.
 <br>
 <br>A category with a single object is called a <b>monoid</b>.
@@ -119,7 +133,7 @@ All the arrows are composable because the beginnings and ends of all arrows are 
 <br>Monoids are known from algebra as a set of elements and a binary operation (let's call it multiplication) with two conditions imposed :
 <ul>
     <li>
-        There is a special element called unit (noted <code>e</code>)such as when you multiply (left or right multiplication) an element by unit, you get the same element :
+        There is a special element called unit (noted <code>e</code>) such as when you multiply (left or right multiplication) an element by unit, you get the same element :
         <br><code>&exist; e | &forall; a, a * e = e * a = a</code>
         <br>(there exists <code>e</code> such as for all <code>a</code>, <code>a * e = e * a = a)</code>)
     </li>
@@ -127,10 +141,10 @@ All the arrows are composable because the beginnings and ends of all arrows are 
 </ul>
 Examples :
 <ul>
-    <li>Natural numbers with multiplication (e = 1)</li>
-    <li>Natural numbers with addition (e = 0)</li>
-    <li>String concatenation (e = empty string) - interesting example because the operation is not symetric, like addition or multiplication</li>
-    <li>List concatenation with appending operation (e = empty list).</li>
+    <li>Natural numbers with multiplication (<code>e</code> = 1)</li>
+    <li>Natural numbers with addition (<code>e</code> = 0)</li>
+    <li>String concatenation (<code>e</code> = empty string) - interesting example because the operation is not symetric, like addition or multiplication</li>
+    <li>List concatenation with appending operation (<code>e</code> = empty list).</li>
 </ul>
 
 Monoids defined in terms of sets and monoids defined in category theory are equivalent.
@@ -146,7 +160,7 @@ Monoids defined in terms of sets and monoids defined in category theory are equi
 </ul>
 So there is a one to one correspondance ; these are the same things seen from two different perspectives.
 
-<img src="img/monoid-set-category.jpg" alt="Equivalence of monoid defined as a set and a category">
+<img class="margin border" src="img/monoid-set-category.jpg" alt="Equivalence of monoid defined as a set and a category">
 
 For example, to express the addition in natural numbers as a category, we would have one a arrow which corresponds to adding 5, one arrow corresponding to adding 2, and their composition corresponds to adding 7.
 <br>
@@ -155,5 +169,6 @@ For example, to express the addition in natural numbers as a category, we would 
 
 <!-- ********************************************************************************* -->
 <!-- ************************************* -->
+</article>
 </body>
 </html>

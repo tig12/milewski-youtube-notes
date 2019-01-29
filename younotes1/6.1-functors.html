@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>6.1: Functors | Categories Bartosz Milewski Youtube notes</title>
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">                                       
     <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
     <link href="../static/style.css" rel="stylesheet" type="text/css">
 </head>
@@ -17,10 +17,15 @@
 </nav>
 
 
+<header>
 <h1>6.1: Functors</h1>
-
 <div>Notes from <a href="https://www.youtube.com/watch?v=w1WMykh7AxA">this youtube video</a></div>
+</header>
 
+<article>
+
+
+<!-- ********************************************************************************* -->
 <h2>Motivation</h2>
 
 Why are functors so important ? Functors are mapping between categories. For mathematicians, the important things are <b>natural transformations</b>, which are mapping between functors, and functors is an important step towards the definition of natural transformation.
@@ -39,6 +44,7 @@ Why are functors so important ? Functors are mapping between categories. For mat
 <br>
 <br>This is what's important : being able to define mapping between categories. We can think of one category as being the pattern or the model and we map it into an other category and we recognize a match of this model or embed this model into an other category.
 
+<!-- ********************************************************************************* -->
 <h2>Definition</h2>
 
 First we must be able to match objects. For simplicity, let's just consider small categories, where the objects just form a set. So mapping objects is just a mapping of sets, a function. Things we know about functions, like collapse things (non injective) or not cover the whole codomain (non surjective), just translate to that part of the definition of a functor.
@@ -48,7 +54,7 @@ First we must be able to match objects. For simplicity, let's just consider smal
 <br>
 <br>To preserve structure, our mapping must also map arrows.
 
-<img src="img/functor.jpg" alt="Functor">
+<img class="border margin" src="img/functor.jpg" alt="Functor">
 
 Let's call <code>F</code> the functor beween categories <code>C</code> and <code>D</code>.
 <br>In category <code>C</code>, the arrows between two objects <code>a</code> and <code>b</code> form a set, the hom-set <code>C(a,b)</code> which is mapped to hom-set <code>D(Fa, Fb)</code>. A mapping between hom-sets is a mapping between sets, which is again a function. We must then define a function for each pair of objects.
@@ -63,6 +69,7 @@ Let's call <code>F</code> the functor beween categories <code>C</code> and <code
 <br>
 <br>Let's also notice that <code>C</code> and <code>D</code> can be the same category. In this case <code>F</code> is called an <b>Endofunctor</b>.
 
+<!-- ********************************************************************************* -->
 <h2>Properties</h2>
 
 Whenever objects are connected in the source category, they are connected in the target category.
@@ -76,26 +83,30 @@ Whenever objects are connected in the source category, they are connected in the
 <br>Notice that this concerns only hom-sets, not objects. A functor can collapse objects (non injective on objects) and still be faithful. Or it can map the source category to a subset of the destination category and still be ful.
 <br>The most "fidel" functors are ful and faithful (fully faithful), hom-set mappings are surjective and injective, isomorphic.
 
+<!-- ************************************* -->
 <h3>Functor on one object category</h3>
 
 This category is called <code>1</code>. This will map in one object of the destination category.
 <br>There are many such mappings as there are many objects to pick in the destination category.
 
-<img src="img/functor-one-object.jpg" alt="Functor on one object category">
+<img class="border margin" src="img/functor-one-object.jpg" alt="Functor on one object category">
 
 A functor from a single object category is equivalent to picking an object in the destination category. It's like with functions, from the terminal object (singleton set) into any other set to pick an element of the set.
 
+<!-- ************************************* -->
 <h3><a name="the-constant-functor">The constant functor</a></h3>
 The constant functor is a functor that collapses all objects of the source category to one single object <code>c</code> of the destination category.
 
-<img src="img/constant-functor.jpg" alt="Constant functor">
+<img class="border margin" src="img/constant-functor.jpg" alt="Constant functor">
 
 All the arrows of the source category are mapped to identity.
 <br><code>c</code> is a kind of black hole.
 <br>There are many constant functors depending on which object we pick in the destination category.
-<br>This functor is noted <span style="font-weight:bold; font-size:1.5em;"><code>&Delta;<sub>c</sub></code></span>.
+<br>This functor is noted <code class="big3 bold">&Delta;<sub>c</sub></code>.
 <br>The object c totally defines the functor.
 
+
+<!-- ********************************************************************************* -->
 <h2>In programming</h2>
 
 Most common functors found in programming are endofunctors in the category of types and functions.
@@ -105,25 +116,31 @@ Most common functors found in programming are endofunctors in the category of ty
 <br>In Haskell we call it type constructor ; in other languages, it's called parametrized data type, or template, or generic type. It's the notion of a whole family of types parametrized by other types.
 <br>And it also has to map morphisms (here functions).
 
+<!-- ************************************* -->
 <h3>Example : Maybe</h3>
 
 For every type <code>a</code>, we are defining a new type <code>Maybe a</code>.
-<div><pre>data Maybe a</pre></div>
+<pre>data Maybe a</pre>
 <code>a</code> is a type ; can be integer, boolean...
 <br>The functor <code>Maybe</code> maps type <code>a</code> to type <code>Maybe a</code> ; for example <code>Int</code> is mapped to <code>Maybe Int</code>.
 <br>In Haskell, the definition is :
-<div><pre>data Maybe a = Nothing
-             | Just a</pre></div>
+<pre>
+data Maybe a = Nothing
+             | Just a
+</pre>
+
 It's a coproduct of unit and identity.
 <br>
 <br>To be a functor, we need to define mapping of functions.
 
-<img src="img/maybe-functor.jpg" alt="Maybe functor">
+<img class="border margin" src="img/maybe-functor.jpg" alt="Maybe functor">
 
 A function <code>f</code> between two types <code>a</code> and <code>b</code> must be mapped to a function beween <code>Maybe a</code> and <code>Maybe b</code>.
 <br>In Haskell, this function, <code>Maybe f</code> is noted <code>fmap f</code>, it has the same name for all functors.
 <br>For the <code>Maybe</code> functor, the definition of <code>fmap</code> is :
-<div><pre>fmap :: (a &rarr; b) &rarr; (Maybe a &rarr; Maybe b)</pre></div>
+
+<pre>fmap :: (a &rarr; b) &rarr; (Maybe a &rarr; Maybe b)</pre>
+
 It takes in argument a function from type <code>a</code> to type <code>b</code> and returns a function from type <code>Maybe a</code> to <code>Maybe b</code>.
 <br>In Haskell we don't need to specify for which <code>fmap</code> we mean but in mathematics we would say <code>fmap<sub>Maybe</sub></code>.
 <br><code>fmap</code> is defined differently for every functor. In Haskell we have a kind of polymorphism.
@@ -131,10 +148,10 @@ It takes in argument a function from type <code>a</code> to type <code>b</code> 
 <h4>Implementation</h4>
 <code>fmap</code> takes a function <code>f</code> from <code>a</code> to <code>b</code> and produces a function that goes from <code>Maybe a</code> to <code>Maybe b</code>.
 <br>This function takes a <code>Maybe a</code>.
-<br>A <code>Maybe a</code> can be either <code>Nothing</code> or <code>Just</code>, so we need to consider two cases.
-<ul>
+<br>A <code>Maybe a</code> can be either <code>Nothing</code> or <code>Just</code>, so we need to consider two cases :
+<ol>
     <li>
-        <div><pre>fmap f Nothing = Nothing</pre></div>
+        <pre>fmap f Nothing = Nothing</pre>
         The return type must be of type <code>Maybe b</code>.
         <br>But does it really have to be <code>Nothing</code> (appart from <code>Bottom</code>) ?
         <br>We could say "it's <code>Nothing</code> unless the type <code>a</code> is integer".
@@ -143,17 +160,21 @@ It takes in argument a function from type <code>a</code> to type <code>b</code> 
         <br>Once we impose that condition of being parametrically polymorphic, we are making it much more restrictive. So it's so much more restrictive that it leads to so-called <i>theorm for free</i>, something that says "because in Haskell we can only implement polymorphic functions of a limited kind (a certain type of polymorphism) then it imposes additional conditions on what we can do".
     </li>
     <li>
-        <div><pre>fmap f Just x = Just(f x)</pre></div>
+        <pre>fmap f Just x = Just(f x)</pre>
         [ We could say it's <code>Nothing</code>. Homework : if we put <code>Nothing</code>, will it be a good functor ? ]
         <br>This is a typical way of implementing a functor. A functor on <code>a</code> usually has something of type <code>a</code> inside and can just apply this function to the insides of the functor.
     </li>
 </ul>
 
 We now have the definition of mappings of the functor :
-<div><pre>data Maybe a = Nothing
-             | Just a</pre> defines object mapping.</div>
-<div><pre>fmap f Nothing = Nothing
-fmap f Just x = Just(f x)</pre> defines morphism mapping.</div>
+<pre>data Maybe a = Nothing
+             | Just a
+</pre>
+defines object mapping.
+<pre>fmap f Nothing = Nothing
+fmap f Just x = Just(f x)
+</pre>
+defines morphism mapping.
 But to know if we have a functor, we must know :
 <ul>
     <li>
@@ -167,5 +188,6 @@ But to know if we have a functor, we must know :
 
 <!-- ********************************************************************************* -->
 <!-- ************************************* -->
+</article>
 </body>
 </html>

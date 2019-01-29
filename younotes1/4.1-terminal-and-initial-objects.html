@@ -17,10 +17,15 @@
 </nav>
 
 
+<header>
 <h1>4.1: Terminal and initial objects</h1>
-
 <div>Notes from <a href="https://www.youtube.com/watch?v=zer1aFgj4aU">this youtube video</a></div>
+</header>
 
+<article>
+
+
+<!-- ********************************************************************************* -->
 <h2>Recapitulation on Kleisli category</h2>
 We start with a category <code>C</code> and based on this category we build an other category, the Kleisli category <code>K</code>.
 <br>In <code>K</code>, the objects are the same as in <code>C</code>. However, the arrows in <code>K</code> are not the same as the arrows in <code>C</code>. 
@@ -31,29 +36,30 @@ We start with a category <code>C</code> and based on this category we build an o
 <br>In <code>C</code>, the arrow from <code>a</code> to <code>mb</code> (the embellished arrow) becomes the arrow from <code>a</code> to <code>b</code> in <code>K</code>.
 <br>In a way, we implement an arrow in <code>K</code> in terms of an arrow in <code>C</code>.
 
-<img src="img/kleisli.jpg" alt="Kleisli category">
+<img class="margin border" src="img/kleisli.jpg" alt="Kleisli category">
 
 For <code>K</code> to be a category, we need :
-<ul>
+<ul class="spaced">
     <li>
-        Composition ; this is not obvious.
+        <b>Composition</b> ; this is not obvious.
         <br>In <code>C</code>, the arrow from <code>a</code> to <code>mb</code> and the arrow from <code>b</code> to <code>mc</code> do not compose (the end of the first is different from the begining of the second).
         <br>We saw that in this particular case, they compose : first we use the arrow from <code>a</code> to <code>mb</code>, and we get the pair <code>(b, string)</code> ; from this pair we take <code>b</code> and use the arrow from <code>b</code> to <code>mc</code>, and we get the pair <code>(c, string)</code> ; and we combine this by concatenating the two strings to return a pair <code>(c, string1 + string2)</code>.
         <br>This was possible because concatenation composes, but this is not generally true.
         <br>To have composition in <code>K</code>, we must be able to find a way to define composition in the implementation.
     </li>
     <li>
-        Identity : we built that defining an arrow from <code>a</code> to <code>ma</code>, which has to be a unit in the new composition we build.
+        <b>Identity</b> : we built that defining an arrow from <code>a</code> to <code>ma</code>, which has to be a unit in the new composition we build.
         <br>This was achieved using an empty string.
     </li>
     <li>
-        Associativity ; this was possible because string concatenation is associative.
+        <b>Associativity</b> ; this was possible because string concatenation is associative.
     </li>
 </ul>
 
 Once all this is established, we can say that <code>K</code> is a category.
 <br>And the mapping <code>m</code> is called a <b>monad</b> ; this is one of the many definition of a <b>monad</b>.
 
+<!-- ********************************************************************************* -->
 <h2>Universal construction</h2>
 
 So we talked about sets, with two views : the category <code>Set</code>, and set theory.
@@ -71,6 +77,7 @@ So we talked about sets, with two views : the category <code>Set</code>, and set
 <br>So you say "here is my pattern, google in this category and show me your hits, everything that matches this pattern". In general we get a lot of results, often an infinity.
 <br>So it's not good enough, we need to rank these results. If we have two hits matching the same pattern, we need to be able to say which one is better than the other. Maybe not all objects are comparable, and this does not guarantee that one object is at the top. But if there is one, then we know that it is the object we were looking for.
 
+<!-- ********************************************************************************* -->
 <h2>Terminal object</h2>
 
 We place ourselves in the <code>Set</code> category and try to find the universal property for the <b>singleton set</b>.
@@ -80,7 +87,7 @@ We place ourselves in the <code>Set</code> category and try to find the universa
 
 <br>One interesting property is that it has an incoming arrow coming from every other object in the category. A polymorphic function which ignores its argument and returns a unit. There is even a function from the empty set (<code>void</code>).
 
-<img src="img/singleton-incoming.jpg" alt="Incoming arrows to a singleton">
+<img class="margin border" src="img/singleton-incoming.jpg" alt="Incoming arrows to a singleton">
 
 Unfortunately, this property is not limited to empty set. In fact there are arrows from every set to every other set, except for one case : there is no arrow from a non-empty set to empty set.
 <br>For example, there are at least two functions between a set and a two-element set (type <code>bool</code>) : functions that we can call <code>true</code> and <code>false</code>, which ignore the arguments and return <code>true</code> or <code>false</code>.
@@ -106,10 +113,12 @@ Unfortunately, this property is not limited to empty set. In fact there are arro
     </li>
 </ul>
 
-<h4>Example in an order</h4>
+<!-- ************************************* -->
+<h3>Example in an order</h3>
 What does a teminal object mean ? Having an arrow from any other object means that the object is <i>less than or equal</i> any other object. So the terminal object must be the largest object.
 <br>Obviously we see that some categories don't have a largest object, for example there is no largest natural number.
 
+<!-- ********************************************************************************* -->
 <h2>Initial object</h2>
 
 We can try to define an empty set, or see what it happens if we invert the arrows of the terminal object. In fact, this is the same question.
@@ -117,7 +126,7 @@ We can try to define an empty set, or see what it happens if we invert the arrow
 <br>We call <b>void</b> empty set.
 <br>There is a function going from void to any other type, a tricky function called <b>absurd()</b> : I say that I have this function, try calling it ; give me an element of void and I'll give you an element of a. Since you can't give me an element of void, you can't prove that this function does not exist.
 
-<img src="img/absurd.jpg" alt="Outgoing arrows from empty set">
+<img class="margin border" src="img/absurd.jpg" alt="Outgoing arrows from empty set">
 
 Here we have reversed the definition used for the terminal object.
 <br>The <b>initial object</b> is an object that has a unique outgoing arrow to every other object.
@@ -134,11 +143,12 @@ Here we have reversed the definition used for the terminal object.
     </li>
 </ul>
 
+<!-- ************************************* -->
 <h3>Unique path</h3>
 
 In any category that has a terminal object, any path that goes from an object to the terminal object can be replaced by a single arrow. 
 
-<img src="img/path-to-terminal.jpg" alt="Outgoing arrows from empty set">
+<img class="margin border" src="img/path-to-terminal.jpg" alt="Outgoing arrows from empty set">
 
 And it's always the same arrow, that's where uniqueness come from : any path can be shrunk to the same unique arrow.
 <br>
@@ -146,6 +156,7 @@ And it's always the same arrow, that's where uniqueness come from : any path can
 <br>
 <br>And the same is true with initial object if we reverse.
 
+<!-- ************************************* -->
 <h3>Uniqueness</h3>
 
 The next question we might ask is "how many of these objects are there ?"
@@ -170,6 +181,7 @@ Suppose we have two terminal objects a and b. Just apply the definition :
 <br>Similarily <span class="formula">f o g = Id<sub>b</sub></span>
 <br>And it's a unique isomorphism because <code>f</code> and <code>g</code> are unique (by definition of terminal object).
 
+<!-- ********************************************************************************* -->
 <h2>Back to universal constructions</h2>
 
 This illustrates universal construction. Here the pattern to pick is the simplest possible pattern, an object.
@@ -177,7 +189,7 @@ This illustrates universal construction. Here the pattern to pick is the simples
 <br>The query is very imprecise, but we have the ranking. We say that a is better than b if there is a unique arrow from b to a.
 <br>Many objects have multiple arrows incomping to them, so they don't compare, the ranking is not a total order.
 
-<img src="img/terminal-object-selection.jpg" alt="Terminal object selection">
+<img class="margin border" src="img/terminal-object-selection.jpg" alt="Terminal object selection">
 
 So the terminal object is better than any other object.
 <br>
@@ -185,5 +197,6 @@ So the terminal object is better than any other object.
 
 <!-- ********************************************************************************* -->
 <!-- ************************************* -->
+</article>
 </body>
 </html>

@@ -17,9 +17,13 @@
 </nav>
 
 
+<header>
 <h1>2.1: Functions, epimorphisms</h1>
-
 <div>Notes from <a href="https://www.youtube.com/watch?v=O2lZkr-aAqk">this youtube video</a></div>
+</header>
+
+<article>
+
 
 <br>Every time you design a language, you have to provide semantics : what does it mean ? There are two ways of defining semantics.
 <br>One is <b>operational semantics</b> by telling how this things execute ; how a statement can be transformed in a simpler one.
@@ -37,7 +41,7 @@
 <br>In practice, we need side effects, but this can be described on top of pure functions.
 <br>If we get to the bottom, the simplest, we get to pure functions, and we can build more complex things on top of it using composability.
 
-<!-- ******************************* -->
+<!-- ********************************************************************************* -->
 <h2>Functions</h2>
 
 Functions are defined in mathematics as a special kind of <b>relation</b>.
@@ -45,7 +49,7 @@ Functions are defined in mathematics as a special kind of <b>relation</b>.
 <br>So a relation is a subset of pairs of elements. The set of all pairs form a <b></b>.
 <br>Any substet of this cartesian product is a relation by definition. Without any other requirement.
 
-<img class="margin" src="img/relation.jpg" alt="Relation">
+<img class="margin border" src="img/relation.jpg" alt="Relation">
 
 A relation doesn't have to be symetric.
 <br>An element of <code>S<sub>1</sub></code> can be mapped to several elements of <code>S<sub>2</sub></code>.
@@ -59,7 +63,7 @@ A relation doesn't have to be symetric.
 <br>But it's ok for several arguments of a function to be mapped to the same value.
 <br>If we consider total functions, all the elements of <code>S<sub>1</sub></code> must be mapped to elements of <code>S<sub>2</sub></code>. But not all elements of <code>S<sub>2</sub></code> need to be mapped by the function
 
-<img class="margin" src="img/function.jpg" alt="Function">
+<img class="margin border" src="img/function.jpg" alt="Function">
 
 <code>S<sub>1</sub></code> is called the <b>domain</b> of the function and <code>S<sub>2</sub></code> the <b>codomain</b>
 <br>The <b>image</b> of the function is the subset of <code>S<sub>2</sub></code> that is mapped by the function.
@@ -88,7 +92,7 @@ If we use Haskell notation :
 <br>A function that is invertible is symetric ; it is called an <b>isomorphism</b>.
 <br>This property can be translated to categorical language :
 
-<img class="margin" src="img/isomorphism.jpg" alt="Isomorphism">
+<img class="margin border" src="img/isomorphism.jpg" alt="Isomorphism">
 
 <br><span class="formula">g o f = Id<sub>a</sub></span> <span class="formula">f o g = Id<sub>b</sub></span>
 <br>
@@ -104,13 +108,13 @@ If we use Haskell notation :
 <ul class="spaced">
     <li>
         If a function collapses several elements of <code>a</code> to the same element of <code>b</code>.
-        <img class="margin" src="img/function-non-injective.jpg" alt="Non injective function">
+        <img class="margin border" src="img/function-non-injective.jpg" alt="Non injective function">
         For example function <code>isEven()</code>, which asociates a boolean to an integer.
         <br>This corresponds to the process of abstraction : we loose information about which element generated <code>y</code>, we leave the details to keep only the information that interests us.
     </li>
     <li>
         If the image of the function doesn't fill the whole codomain.
-        <img class="margin" src="img/function-non-surjective.jpg" alt="Non surjective function">
+        <img class="margin border" src="img/function-non-surjective.jpg" alt="Non surjective function">
         Corresponds to the process of modeling : I'm recognizing the pattern of <code>a</code> inside <code>b</code>.
     </li>
 </ul>
@@ -150,7 +154,7 @@ We have defined the notions of injection and surjection in set theory, using the
 
 So how to define an epimorphism without talking about elements ? We use other functions and composition.
 
-<img class="margin" src="img/epimorphism.jpg" alt="Categorical definition of an epimorphism">
+<img class="margin border" src="img/epimorphism.jpg" alt="Categorical definition of an epimorphism">
 
 If we have a function <code>f</code> from <code>a</code> to <code>b</code> which is not surjective, it means that there are elements of <code>b</code> that are not in the image of <code>f</code>.
 <br>If we take a function <code>g :: b &rarr; c</code> whose domain is <code>b</code>, it will map elements of <code>b</code> that are inside and outside the image of <code>f</code>.
@@ -175,5 +179,6 @@ f is an epimorphism if for all set c, for all functions g<sub>1</sub> and g<sub>
 
 <!-- ********************************************************************************* -->
 <!-- ************************************* -->
+</article>
 </body>
 </html>

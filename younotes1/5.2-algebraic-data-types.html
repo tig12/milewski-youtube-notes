@@ -17,11 +17,16 @@
 </nav>
 
 
+<header>
 <h1>5.2: Algebraic data types</h1>
-
 <div>Notes from <a href="">this youtube video</a></div>
+</header>
+
+<article>
 
 
+
+<!-- ********************************************************************************* -->
 <h2>Product</h2>
 
 Why is it an algebra ?
@@ -34,10 +39,10 @@ Why is it an algebra ?
     <li><b>Symetry</b> (this is not needed for a monoid)
         <br>The product of numbers is symetric, but this is not true for the product of two types :
         <br>If we have types <code>a</code> and <code>b</code>, the pair <code>(a, b)</code> is different from <code>(b,a)</code>. However they contain the same information, which means that they are isomorphic ; the isomorphism is called <code>swap</code>.
-<div><pre>
+<pre>
 swap :: (a, b) &rarr; (b, a)
 swap p  = (snd p, fst p)
-</pre></div>
+</pre>
         The inverse of <code>swap</code> is <code>swap</code>.
         <br>So multiplication is symetric up to isomorphism.
     </li>
@@ -46,7 +51,7 @@ swap p  = (snd p, fst p)
         <b>Associativity</b>
         <br>Are <code>((a, b), c)</code> and <code>(a, (b, c))</code> equivalent ? No.
         <br>No but these two types contain the same information, but re-arranged ; they are isomorphic.
-        <div><pre>assoc :: ((a, b), c) = (a, (b, c))</pre></div>
+        <pre>assoc :: ((a, b), c) = (a, (b, c))</pre>
         This function is an isomorphism, it has an inverse.
         <br>Associativity means that we can omit parentheses and simply write <code>(a, b, c)</code>.
         <br>So we just have tuples ; structs or records with multiple fields are just examples of this.
@@ -57,10 +62,10 @@ swap p  = (snd p, fst p)
         <b>Unit</b>
         <br>What would be the type, which paired with any other type would give the same type ? This type should have only one element.
         <br><code>(a, ())</code> is isomorphic to <code>a</code>.
-<div><pre>
+<pre>
 munit(x, ()) = x
 munit_inv(x) = (x, ())
-</pre></div>
+</pre>
         It's like taking the cartesian product of a line and a point, it gives a line (not exactly the same line).
         <br>What we did for right unit can be done for left unit.
         <br>In classical algebra, this corresponds to <code>a * 1 = a</code>
@@ -69,6 +74,7 @@ munit_inv(x) = (x, ())
 
 So we have a monoid with respect to product.
 
+<!-- ********************************************************************************* -->
 <h2>Sum</h2>
 
 <ul class="spaced">
@@ -81,7 +87,7 @@ So we have a monoid with respect to product.
         <b>Associativity</b>
         <br>Similarily it is also associative up to isomorphism.
         <br>If we want to associate Eithers we can write data structures like
-        <div><pre>data Triple = Left a | Middle b | Right c</pre></div>
+        <pre>data Triple = Left a | Middle b | Right c</pre>
     </li>
     
     <li>
@@ -92,6 +98,7 @@ So we have a monoid with respect to product.
     </li>
 </ul>
 
+<!-- ********************************************************************************* -->
 <h2>Algebra</h2>
 
 So we have a second monoid. That's not all, we would like to combine these two monoids into something bigger.
@@ -141,5 +148,6 @@ So we have a second monoid. That's not all, we would like to combine these two m
 
 <!-- ********************************************************************************* -->
 <!-- ************************************* -->
+</article>
 </body>
 </html>
