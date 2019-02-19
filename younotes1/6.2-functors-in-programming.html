@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>6.2: Functors in programming | Categories Bartosz Milewski Youtube notes</title>
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">                                       
     <link rel="copyright" href="http://www.gnu.org/copyleft/gpl.html"/>
@@ -61,7 +61,7 @@ We need to prove that <pre>fmap id<sub>a</sub> = id<sub>Maybe a</sub></pre>
 We need to prove that
 <pre>fmap(g . f) = fmap g . fmap f</pre>
 Corresponds to this diagram :
-<div><img class="margin border" src="img/fmap-composition.jpg" alt="fmap composition" /><br>(TODO : add <code>fmap g . fmap f</code>)</div>
+<div><img class="margin border" src="img/fmap-composition.jpg" alt="fmap composition"><br>(TODO : add <code>fmap g . fmap f</code>)</div>
 This can be showed by equational reasoning using the same method as we did for identity (It's done on the <a href="https://bartoszmilewski.com/2015/01/20/functors/">blog page about functors</a>).
 <br>Strictly speaking there is no need to prove it because as we use parametric polymorphism, this is a theorem for free. Once the id property is proven, this follows.
 
