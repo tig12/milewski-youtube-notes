@@ -1,4 +1,18 @@
 
-These are notes and screenshots of video courses on categories published by Bartosz Milewski on youtube.
-See index.html for links to the original resources.
+Notes and screenshots of video courses on category theory by Bartosz Milewski on youtube
+https://www.youtube.com/playlist?list=PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_
 
+Usage :
+Download or clone this repository, and browse index.html on your local machine.
+
+These notes helped me to follow the beginning of the course, but do not bring new information.
+More info on https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/
+
+Notes go until part I, chapter 7.2.
+
+For the moment, I stopped watching the videos (because I bought the book).
+
+To download these notes :
+https://github.com/tig12/milewski-youtube-notes
+
+Notes released in FDL and cc-by-sa
